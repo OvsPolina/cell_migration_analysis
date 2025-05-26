@@ -1,15 +1,23 @@
 import os
 import sys
+from pathlib import Path
 from PyQt6.QtWidgets import (
-    QApplication, QMainWindow, QFileDialog, QMessageBox, QWidget, QTableWidget, QTableWidgetItem, QTreeWidgetItem, QTabWidget, QVBoxLayout, QHeaderView
+    QApplication, QMainWindow, QFileDialog, QMessageBox, QWidget, QTableView, QTableWidgetItem, QTreeWidgetItem, QTabWidget, QVBoxLayout, QHeaderView
 )
 import pandas as pd
 import string
+
+from openpyxl import Workbook
+from openpyxl.utils.dataframe import dataframe_to_rows
+import openpyxl
+
+from src.data_model import DataModel
 
 class UIFile(QWidget):
     def __init__(self, ui):
         super().__init__()  # нужно вызвать, чтобы QWidget инициализировался корректно
         self.ui = ui
+        self.tabs_data_models = {}
         self._connect_signals()
 
     def _connect_signals(self):
@@ -20,21 +28,22 @@ class UIFile(QWidget):
         self.ui.treeWidget.itemClicked.connect(self.on_tree_item_clicked)
 
     def open_file(self):
-        file_path, _ = QFileDialog.getOpenFileName(self, "Open Excel File", "", "Excel files (*.xlsx *.xls, *.xlsm)")
+        file_path, _ = QFileDialog.getOpenFileName(self, "Open Excel File", "", "Excel files (*.xlsx *.xls *.xlsm)")
         if not file_path:
             return
-
+        file_path = Path(file_path)
         try:
             excel_data = pd.read_excel(file_path, sheet_name=None, engine='openpyxl')
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Cannot open the file:\n{e}")
             return
 
+        
         # Добавляем новый корневой элемент в дерево для файла
         self.ui.treeWidget.show()
         total_width = self.ui.splitter.width()
         self.ui.splitter.setSizes([int(total_width * 0.3), int(total_width * 0.7)])
-        file_root = QTreeWidgetItem([file_path])
+        file_root = QTreeWidgetItem([file_path.name])
         self.ui.treeWidget.addTopLevelItem(file_root)
 
         # Создаем новый виджет страницы и таб виджет для листов
@@ -47,15 +56,13 @@ class UIFile(QWidget):
         
         # Добавляем вкладки с листами
         for sheet_name, df in excel_data.items():
-            table = QTableWidget()
-            table.setRowCount(df.shape[0])
-            table.setColumnCount(df.shape[1])
-            table.setHorizontalHeaderLabels(df.columns.astype(str).to_list())
+            table = QTableView()
+            data_model = DataModel(df)
+            table.setModel(data_model)
+            table.setSortingEnabled(True)
+            table.resizeColumnsToContents()
 
-            for row in range(df.shape[0]):
-                for col in range(df.shape[1]):
-                    item = QTableWidgetItem(str(df.iat[row, col]))
-                    table.setItem(row, col, item)
+            self.tabs_data_models[sheet_name] = data_model
 
             tab_widget.addTab(table, sheet_name)
 
@@ -71,7 +78,7 @@ class UIFile(QWidget):
         # Переключаемся на только что добавленную страницу (индекс -1 - последний)
         self.ui.stackedWidget.setCurrentWidget(page)
 
-    def on_tree_item_clicked(self, item, column):
+    def on_tree_item_clicked(self, item):
         parent = item.parent()
         if parent is None:
             # Кликнули по файлу — найдем индекс стэка с этим файлом
@@ -96,9 +103,11 @@ class UIFile(QWidget):
         # Пример функции — ты должен реализовать, как хранишь соответствие
         for i in range(self.ui.stackedWidget.count()):
             widget = self.ui.stackedWidget.widget(i)
-            # допустим, у каждого виджета есть property с именем файла
-            if getattr(widget, 'filename', None) == filename:
-                return i
+            file_path = getattr(widget, 'filename', None)
+            if file_path is not None:
+                # file_path — объект Path, filename — строка из дерева (только имя файла)
+                if file_path.name == filename:
+                    return i
         return None
 
     def get_new_filename(self, base_dir, prefix="new_file_", extension=".xlsx"):
@@ -115,64 +124,110 @@ class UIFile(QWidget):
         for i in range(1, len(used_numbers) + 2):
             if i not in used_numbers:
                 return os.path.join(base_dir, f"{prefix}{i}{extension}")
-
-
+    
     def new_file(self):
         try:
             temp_dir = os.path.join(os.getcwd(), "temp")
+            os.makedirs(temp_dir, exist_ok=True)
             new_file_path = self.get_new_filename(temp_dir)
-            empty_df = pd.DataFrame()
+            new_file_path = Path(new_file_path)
+            # создаем пустой DataFrame
+            columns = list(string.ascii_uppercase)
+            empty_df = pd.DataFrame('', index=range(1000), columns=columns)
+
+            # сохраняем в Excel
             with pd.ExcelWriter(new_file_path, engine='openpyxl') as writer:
                 empty_df.to_excel(writer, sheet_name='Sheet1', index=False)
+
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Cannot create new file:\n{e}")
             return
 
-        # Добавляем новый корневой элемент в дерево для файла
+        # Показываем и настраиваем дерево
         self.ui.treeWidget.show()
         total_width = self.ui.splitter.width()
         self.ui.splitter.setSizes([int(total_width * 0.3), int(total_width * 0.7)])
-        file_root = QTreeWidgetItem([new_file_path])
+        file_root = QTreeWidgetItem([new_file_path.name])
         self.ui.treeWidget.addTopLevelItem(file_root)
 
-        # Создаем новый виджет страницы и таб виджет для листов
+        # Создаем страницу и таб
         page = QWidget()
         page.filename = new_file_path
-        layout = QVBoxLayout(page)  # Внутренний layout для страницы
-    
+        layout = QVBoxLayout(page)
         tab_widget = QTabWidget()
         layout.addWidget(tab_widget)
-        
-        table = QTableWidget()
-        table.setRowCount(1000)
-        columns = list(string.ascii_uppercase)
-        table.setColumnCount(len(columns))
-        table.setHorizontalHeaderLabels(columns)
 
-        table.setShowGrid(True)
-        table.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectItems)
-        table.setSelectionMode(QTableWidget.SelectionMode.ExtendedSelection)
+        # Создаем TableView и модель
+        table_view = QTableView()
+        data_model = DataModel(empty_df)
+        table_view.setModel(data_model)
+        table_view.setSortingEnabled(True)
+        table_view.resizeColumnsToContents()
+        table_view.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Interactive)
+        table_view.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Fixed)
+        table_view.horizontalHeader().setStretchLastSection(True)
 
-        table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Interactive)
-        table.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Fixed)
-        table.horizontalHeader().setStretchLastSection(True)
+        tab_widget.addTab(table_view, "Sheet1")
 
-        tab_widget.addTab(table, "Sheet1")
+        self.tabs_data_models["Sheet1"] = data_model
 
-        # Добавляем лист в дерево
+        # дерево: лист
         sheet_item = QTreeWidgetItem(["Sheet1"])
         file_root.addChild(sheet_item)
-
         file_root.setExpanded(True)
 
-        # Добавляем страницу с табами в stackedWidget
+        # добавляем страницу
         self.ui.stackedWidget.addWidget(page)
-
-        # Переключаемся на только что добавленную страницу (индекс -1 - последний)
         self.ui.stackedWidget.setCurrentWidget(page)
 
     def save_file(self):
-        pass
+        page = self.ui.stackedWidget.currentWidget()
+        if not hasattr(page, "filename"):
+            QMessageBox.warning(self, "Warning", "No file associated with this page.")
+            return
+
+        file_path = page.filename  # объект Path
+        temp_dir = Path.cwd() / "temp"
+
+        if temp_dir in file_path.parents:
+            # Если временный файл — вызываем Save As
+            self.save_as_file()
+            try:
+                file_path.unlink(missing_ok=True)
+            except Exception as e:
+                print(f"Warning: could not delete temp file: {e}")
+            return
+        else:
+            self._save_page_to_file(page, file_path)
 
     def save_as_file(self):
-        pass
+        page = self.ui.stackedWidget.currentWidget()
+        file_path, _ = QFileDialog.getSaveFileName(
+            self, "Save As", "", "Excel files (*.xlsx *.xls)"
+        )
+        if not file_path:
+            return
+        file_path = Path(file_path)
+
+        # Обновляем путь файла
+        page.filename = file_path
+        self._save_page_to_file(page, file_path)
+
+    def _save_page_to_file(self, page, file_path):
+        try:
+            tab_widget = page.findChild(QTabWidget)
+            if not tab_widget:
+                raise Exception("Tab widget not found.")
+
+            with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
+                for i in range(tab_widget.count()):
+                    table_view = tab_widget.widget(i)
+                    model = table_view.model()
+                    if not hasattr(model, 'get_dataframe'):
+                        raise Exception("Model does not implement get_dataframe().")
+                    df = model.get_dataframe()
+                    sheet_name = tab_widget.tabText(i)
+                    df.to_excel(writer, sheet_name=sheet_name, index=False)
+
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Failed to save file:\n{e}")

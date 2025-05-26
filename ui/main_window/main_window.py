@@ -84,6 +84,7 @@ class Ui_MainWindow(object):
         self.actionSave.setObjectName("actionSave")
         self.actionSave_as = QtGui.QAction(parent=MainWindow)
         self.actionSave_as.setObjectName("actionSave_as")
+        
         self.actionUndo = QtGui.QAction(parent=MainWindow)
         self.actionUndo.setObjectName("actionUndo")
         self.actionRedo = QtGui.QAction(parent=MainWindow)
