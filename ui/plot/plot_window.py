@@ -13,12 +13,15 @@ class Ui_Plot(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(799, 625)
+
         self.verticalLayoutWidget = QtWidgets.QWidget(parent=Dialog)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(9, 9, 781, 611))
+        #self.verticalLayoutWidget.setGeometry(QtCore.QRect(9, 9, 781, 611))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
+
+        self.verticalLayout = QtWidgets.QVBoxLayout(Dialog)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
+
         self.widget = QtWidgets.QWidget(parent=self.verticalLayoutWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Expanding)
         sizePolicy.setHorizontalStretch(0)

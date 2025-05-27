@@ -11,26 +11,28 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
 from PyQt6.QtWidgets import (
-    QWidget, QDialog, QMessageBox, QTreeWidgetItem, QTabWidget, QTableWidget, QTableWidgetItem, QVBoxLayout
+    QWidget, QDialog, QMessageBox, QTreeWidgetItem, QTabWidget, QVBoxLayout
 )
 
-class UIAutocorrelation(QWidget):
+class UIMSD(QWidget):
     def __init__(self, ui):
         super().__init__()
         self.ui = ui
-        self.ui.actionAutocorrelation.triggered.connect(self.open_dialog)
+        self.avg_msd_data = []
+        self.ui.actionMSD.triggered.connect(self.open_dialog)
 
     def open_dialog(self):
         dialog = QDialog(self)
         ui = Ui_ConfigurationAutocorrelationWindow()
         ui.setupUi(dialog)
-        self.all_scalar_data = []
+        ui.lineEdit_n_plot_points.setDisabled(True)
+        
         result = dialog.exec()
         if result == QDialog.DialogCode.Accepted:
             self.open_choose_samples_dialog()
             self.values = self._read_values(ui)
             if self.values is not None:
-                self.run_autocorrelation()
+                self.run_msd()
         else:
             return None
 
@@ -90,8 +92,8 @@ class UIAutocorrelation(QWidget):
             else:
                 return None
 
-    def run_autocorrelation(self):
-        if self.values['time_interval'] == 0 or self.values['n_plot_points'] == 0:
+    def run_msd(self):
+        if self.values['time_interval'] == 0:
             QMessageBox.warning(self, "Ошибка", "Пожалуйста, введите корректные числовые значения.")
 
         for filename in self.selected_samples:
@@ -121,24 +123,19 @@ class UIAutocorrelation(QWidget):
             if data is None:
                 continue
 
-
-            # Normalised vector
-            norm_data = self.norm(data)
-            # Average Scalars
-            scalar_data = self.scalars(norm_data)
-            self.all_scalar_data.append((scalar_data, f"{filename[1]}"))
+            # MSD
+            msd_data = self.msd(data)
+            self.avg_msd_data.append((msd_data, f"{filename[1]}"))
 
             #Update table in tab:
             # Обновляем модель
-            new_model = DataModel(scalar_data)
+            new_model = DataModel(msd_data)
             table.setModel(new_model)
-
-        # Create Statistics
 
         # create plot
         dialog = PlotDialog(self, title="MSD Plot")
-        dialog.show_plot(self.plot_scalar_averages)
-        #self.plot_scalar_averages()
+        dialog.show_plot(self.plot_msd)
+        #self.plot_msd()
 
     def treat_data(self, df):
         # Считать в pandas DataFrame
@@ -173,108 +170,59 @@ class UIAutocorrelation(QWidget):
 
         return result_df
     
-    def norm(self, data):
-        data['ΔX'] = np.nan
-        data['ΔY'] = np.nan
-        data["magnitude"] = np.nan
-        data["cos_theta"] = np.nan
-        data["sin_theta"] = np.nan
+    def msd(self, data):
+        data['time'] = np.nan
+        data['avg_msd_by_time_cell'] = np.nan
+        data["avg_msd_by_time_condition"] = np.nan
+        data["sem_by_time_condition"] = np.nan
+
+        avr_msd = []
 
         for track_id in sorted(data["Track n"].unique()):
             track_df = data[data["Track n"] == track_id].sort_values("Slice n")
 
-            track_df['ΔX'] = track_df['X'].diff()
-            track_df['ΔY'] = track_df['Y'].diff()
-            data.loc[track_df.index, 'ΔX'] = track_df["ΔX"].values
-            data.loc[track_df.index, 'ΔY'] = track_df["ΔY"].values
+            track_df['time'] = track_df['Slice n'] * self.values['time_interval']
+            data.loc[track_df.index, 'time'] = track_df["time"].values
+
+            # Calculate MSD
+            msd = np.zeros(self.values['n_time_points'])
+
+            dx = track_df['X'].to_numpy()
+            dy = track_df['Y'].to_numpy()
+
+            for tau in range(1, self.values['n_time_points']):
+                displacements = (dx[tau:] - dx[:-tau])**2 + (dy[tau:] - dy[:-tau])**2
+                msd[tau] = np.mean(displacements)
+
+            track_df['avg_msd_by_time_cell'] = msd
+            data.loc[track_df.index, 'avg_msd_by_time_cell'] = track_df["avg_msd_by_time_cell"].values
             
-            track_df['magnitude'] = np.sqrt(track_df['ΔX']**2 + track_df['ΔY']**2)
-            data.loc[track_df.index, 'magnitude'] = track_df['magnitude'].values
+            avr_msd.append(msd)
 
-            # Косинус и синус угла относительно оси X
-            track_df['cos_theta'] = track_df['ΔX'] / track_df['magnitude']
-            track_df['sin_theta'] = track_df['ΔY'] / track_df['magnitude']
-            data.loc[track_df.index, 'cos_theta'] = track_df['cos_theta'].values
-            data.loc[track_df.index, 'sin_theta'] = track_df['sin_theta'].values
-
-        return data
-    
-    def scalars(self, data):
-        for step in range(1, self.values['n_plot_points'] + 1):
-            time_label = f"time_{step * self.values['time_interval']}"
-            col_name = f"scalar_{time_label}"
-            
-            # Инициализируем колонку
-            data[col_name] = np.nan
-            avg_scalars = []
-            avg_sem = []
-            for track_id in sorted(data["Track n"].unique()):
-                track_df = data[data["Track n"] == track_id].sort_values("Slice n").reset_index()
-
-                dx = track_df['cos_theta'].to_numpy()
-                dy = track_df['sin_theta'].to_numpy()
-                scalars = []
-
-                for i in range(len(track_df) - step):
-                    v1 = np.array([dx[i], dy[i]])
-                    v2 = np.array([dx[i + step], dy[i + step]])
-
-                    if np.any(np.isnan(v1)) or np.any(np.isnan(v2)):
-                        continue
-
-                    scalar = np.dot(v1, v2)
-                    scalars.append(scalar)
-
-                if scalars:
-                    avg = np.mean(scalars)
-                    err = np.std(scalars, ddof=1) / np.sqrt(len(scalars))
-
-                    avg_scalars.append(avg)
-                    avg_sem.append(err)
-
-
-            if avg_scalars:
-                avg = np.mean(avg_scalars)
-                err = np.std(avg_scalars, ddof=1) / np.sqrt(len(avg_scalars))
-                combined = f"{avg:.3f} ± {err:.3f}"
-
-                data.loc[0, col_name] = combined
+        if avr_msd:
+            avr_msd = np.array(avr_msd)
+            avg = np.mean(avr_msd, axis=0)
+            err = np.std(avr_msd, axis=0, ddof=1) / np.sqrt(avr_msd.shape[0])
+            data.loc[:self.values['n_time_points']-1, "avg_msd_by_time_condition"] = avg
+            data.loc[:self.values['n_time_points']-1, "sem_by_time_condition"] = err
 
         return data
                     
-    def plot_scalar_averages(self, ax):
-        plt.figure(figsize=(10, 6))
-        for df, label in self.all_scalar_data:
-            time_points = [0]
-            scalar_values = [1]
+    def plot_msd(self, ax):
+        # Для каждого набора данных
+        for df, label in self.avg_msd_data:
+            if 'avg_msd_by_time_condition' not in df.columns or 'sem_by_time_condition' not in df.columns:
+                continue  # Пропускаем, если нет нужных колонок
 
-            for col in df.columns:
-                if col.startswith("scalar_time_"):
-                    match = re.search(r"scalar_time_(\d+)", col)
-                    if match:
-                        time_point = int(match.group(1))
-                        time_points.append(time_point)
+            # Предполагается, что есть n строк с msd_avg и msd_err
+            y = df['avg_msd_by_time_condition'].dropna().values
+            yerr = df['sem_by_time_condition'].dropna().values
+            x = np.arange(len(y)) * self.values['time_interval']  # временная шкала
 
-                        vals = df[col].dropna().unique()
-
-                        scalars = []
-                        for val in vals:
-                            try:
-                                avg_str = val.split("±")[0].strip()
-                                scalars.append(float(avg_str))
-                            except:
-                                continue
-
-                        scalar_values.append(np.mean(scalars) if scalars else np.nan)
-
-            # Сортировка по времени
-            sorted_pairs = sorted(zip(time_points, scalar_values))
-            sorted_times, sorted_scalars = zip(*sorted_pairs)
-
-            ax.plot(sorted_times, sorted_scalars, marker='o', label=label)
+            ax.errorbar(x, y, yerr=yerr, fmt='o-', capsize=4, label=label)
 
         ax.set_xlabel("Time (step × interval)")
-        ax.set_ylabel("Average Scalar Product")
-        ax.set_title("Autocorrelation Scalar Averages")
+        ax.set_ylabel("Mean Squared Displacement (MSD)")
+        ax.set_title("MSD with SEM")
         ax.grid(True)
         ax.legend()

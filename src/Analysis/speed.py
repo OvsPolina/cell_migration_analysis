@@ -1,8 +1,8 @@
 from ui.configuration.configuration_autocorrelation_window import Ui_ConfigurationAutocorrelationWindow
 from ui.configuration.choose_sample_window import Ui_ChooseSampleWindow
 from ui.plot.plot_window import Ui_Plot
-from src.Plot.plot import PlotDialog
 from src.data_model import DataModel
+from src.Plot.plot import PlotDialog
 import pandas as pd
 import numpy as np
 import re
@@ -11,26 +11,27 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
 from PyQt6.QtWidgets import (
-    QWidget, QDialog, QMessageBox, QTreeWidgetItem, QTabWidget, QTableWidget, QTableWidgetItem, QVBoxLayout
+    QWidget, QDialog, QMessageBox, QTreeWidgetItem, QTabWidget, QVBoxLayout
 )
 
-class UIAutocorrelation(QWidget):
+class UISpeed(QWidget):
     def __init__(self, ui):
         super().__init__()
         self.ui = ui
-        self.ui.actionAutocorrelation.triggered.connect(self.open_dialog)
+        self.speed_data_by_condition = []
+        self.ui.actionSpeed.triggered.connect(self.open_dialog)
 
     def open_dialog(self):
         dialog = QDialog(self)
         ui = Ui_ConfigurationAutocorrelationWindow()
         ui.setupUi(dialog)
-        self.all_scalar_data = []
+        ui.lineEdit_n_plot_points.setDisabled(True)
         result = dialog.exec()
         if result == QDialog.DialogCode.Accepted:
             self.open_choose_samples_dialog()
             self.values = self._read_values(ui)
             if self.values is not None:
-                self.run_autocorrelation()
+                self.run_speed()
         else:
             return None
 
@@ -90,8 +91,8 @@ class UIAutocorrelation(QWidget):
             else:
                 return None
 
-    def run_autocorrelation(self):
-        if self.values['time_interval'] == 0 or self.values['n_plot_points'] == 0:
+    def run_speed(self):
+        if self.values['time_interval'] == 0:
             QMessageBox.warning(self, "Ошибка", "Пожалуйста, введите корректные числовые значения.")
 
         for filename in self.selected_samples:
@@ -121,24 +122,18 @@ class UIAutocorrelation(QWidget):
             if data is None:
                 continue
 
-
-            # Normalised vector
-            norm_data = self.norm(data)
-            # Average Scalars
-            scalar_data = self.scalars(norm_data)
-            self.all_scalar_data.append((scalar_data, f"{filename[1]}"))
+            # Speed data
+            speed_data = self.speed(data)
+            self.speed_data_by_condition.append((speed_data, f"{filename[1]}"))
 
             #Update table in tab:
-            # Обновляем модель
-            new_model = DataModel(scalar_data)
+            new_model = DataModel(speed_data)
             table.setModel(new_model)
-
-        # Create Statistics
 
         # create plot
         dialog = PlotDialog(self, title="MSD Plot")
-        dialog.show_plot(self.plot_scalar_averages)
-        #self.plot_scalar_averages()
+        dialog.show_plot(self.plot_speed)
+        #self.plot_speed()
 
     def treat_data(self, df):
         # Считать в pandas DataFrame
@@ -173,108 +168,80 @@ class UIAutocorrelation(QWidget):
 
         return result_df
     
-    def norm(self, data):
+    def speed(self, data):
         data['ΔX'] = np.nan
         data['ΔY'] = np.nan
-        data["magnitude"] = np.nan
-        data["cos_theta"] = np.nan
-        data["sin_theta"] = np.nan
+        data["time"] = np.nan
+        data["distance_bw_points"] = np.nan
+        data["instant_speed"] = np.nan
+        data["avg_speed_by_cell"] = np.nan
+
+        data["avg_speed_of_condition"] = np.nan
+
+        avg_speeds = []
 
         for track_id in sorted(data["Track n"].unique()):
-            track_df = data[data["Track n"] == track_id].sort_values("Slice n")
+            track_df = data[data["Track n"] == track_id].sort_values("Slice n").reset_index()
 
             track_df['ΔX'] = track_df['X'].diff()
             track_df['ΔY'] = track_df['Y'].diff()
-            data.loc[track_df.index, 'ΔX'] = track_df["ΔX"].values
-            data.loc[track_df.index, 'ΔY'] = track_df["ΔY"].values
             
-            track_df['magnitude'] = np.sqrt(track_df['ΔX']**2 + track_df['ΔY']**2)
-            data.loc[track_df.index, 'magnitude'] = track_df['magnitude'].values
+            track_df['distance_bw_points'] = np.sqrt(track_df['ΔX']**2 + track_df['ΔY']**2)
 
-            # Косинус и синус угла относительно оси X
-            track_df['cos_theta'] = track_df['ΔX'] / track_df['magnitude']
-            track_df['sin_theta'] = track_df['ΔY'] / track_df['magnitude']
-            data.loc[track_df.index, 'cos_theta'] = track_df['cos_theta'].values
-            data.loc[track_df.index, 'sin_theta'] = track_df['sin_theta'].values
+            track_df["time"] = track_df.index * self.values['time_interval']
 
-        return data
-    
-    def scalars(self, data):
-        for step in range(1, self.values['n_plot_points'] + 1):
-            time_label = f"time_{step * self.values['time_interval']}"
-            col_name = f"scalar_{time_label}"
+            dx = track_df['distance_bw_points'].to_numpy()
+            dy = track_df['time'].to_numpy()
             
-            # Инициализируем колонку
-            data[col_name] = np.nan
-            avg_scalars = []
-            avg_sem = []
-            for track_id in sorted(data["Track n"].unique()):
-                track_df = data[data["Track n"] == track_id].sort_values("Slice n").reset_index()
+            track_df["instant_speed"] = dx / dy
 
-                dx = track_df['cos_theta'].to_numpy()
-                dy = track_df['sin_theta'].to_numpy()
-                scalars = []
+            avg = track_df["instant_speed"].mean(skipna=True)
+            avg_speeds.append(avg)
+            
+            # Вставляем обратно все рассчитанные колонки
+            data.loc[track_df.index, ['ΔX', 'ΔY', 'distance_bw_points', 'time', 'instant_speed']] = \
+                track_df[['ΔX', 'ΔY', 'distance_bw_points', 'time', 'instant_speed']]
 
-                for i in range(len(track_df) - step):
-                    v1 = np.array([dx[i], dy[i]])
-                    v2 = np.array([dx[i + step], dy[i + step]])
+            # Вставляем среднюю скорость в первую строку трека
+            data.loc[track_df.index[0], "avg_speed_by_cell"] = avg
 
-                    if np.any(np.isnan(v1)) or np.any(np.isnan(v2)):
-                        continue
+        if avg_speeds:
+            avg = np.mean(avg_speeds)
+            err = np.std(avg_speeds, ddof=1) / np.sqrt(len(avg_speeds))
+            combined = f"{avg:.3f} ± {err:.3f}"
 
-                    scalar = np.dot(v1, v2)
-                    scalars.append(scalar)
-
-                if scalars:
-                    avg = np.mean(scalars)
-                    err = np.std(scalars, ddof=1) / np.sqrt(len(scalars))
-
-                    avg_scalars.append(avg)
-                    avg_sem.append(err)
-
-
-            if avg_scalars:
-                avg = np.mean(avg_scalars)
-                err = np.std(avg_scalars, ddof=1) / np.sqrt(len(avg_scalars))
-                combined = f"{avg:.3f} ± {err:.3f}"
-
-                data.loc[0, col_name] = combined
+            # Запишем значение во все строки данного трека
+            data.loc[0, "avg_speed_of_condition"] = combined
 
         return data
                     
-    def plot_scalar_averages(self, ax):
+    def plot_speed(self, ax):
         plt.figure(figsize=(10, 6))
-        for df, label in self.all_scalar_data:
-            time_points = [0]
-            scalar_values = [1]
+        
+        labels = []
+        avg_values = []
+        errors = []
 
-            for col in df.columns:
-                if col.startswith("scalar_time_"):
-                    match = re.search(r"scalar_time_(\d+)", col)
-                    if match:
-                        time_point = int(match.group(1))
-                        time_points.append(time_point)
+        for df, label in self.speed_data_by_condition:
+            value = df.get("avg_speed_of_condition", [None])[0]  # предполагается, что это строка вида "0.123 ± 0.045"
 
-                        vals = df[col].dropna().unique()
+            if value:
+                try:
+                    avg_str, err_str = value.split("±")
+                    avg = float(avg_str.strip())
+                    err = float(err_str.strip())
+                    labels.append(label)
+                    avg_values.append(avg)
+                    errors.append(err)
+                except Exception as e:
+                    print(f"Ошибка при обработке значения {value}: {e}")
 
-                        scalars = []
-                        for val in vals:
-                            try:
-                                avg_str = val.split("±")[0].strip()
-                                scalars.append(float(avg_str))
-                            except:
-                                continue
+        # Рисуем столбчатую диаграмму
+        x = np.arange(len(labels))
 
-                        scalar_values.append(np.mean(scalars) if scalars else np.nan)
-
-            # Сортировка по времени
-            sorted_pairs = sorted(zip(time_points, scalar_values))
-            sorted_times, sorted_scalars = zip(*sorted_pairs)
-
-            ax.plot(sorted_times, sorted_scalars, marker='o', label=label)
-
-        ax.set_xlabel("Time (step × interval)")
-        ax.set_ylabel("Average Scalar Product")
-        ax.set_title("Autocorrelation Scalar Averages")
-        ax.grid(True)
-        ax.legend()
+        ax.bar(x, avg_values, yerr=errors, capsize=5, color='skyblue')
+        ax.set_xticks(x)
+        ax.set_xticklabels(labels, rotation=45, ha='right')
+        ax.set_ylabel("Average Speed")
+        ax.set_title("Average Speed by Condition")
+        ax.grid(True, axis='y')

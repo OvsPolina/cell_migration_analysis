@@ -73,9 +73,6 @@ class Ui_MainWindow(object):
         self.menuPlot.setObjectName("menuPlot")
         MainWindow.setMenuBar(self.menuBar)
         
-        self.actionFile = QtGui.QAction(parent=MainWindow)
-        self.actionFile.setMenuRole(QtGui.QAction.MenuRole.NoRole)
-        self.actionFile.setObjectName("actionFile")
         self.actionNew_File = QtGui.QAction(parent=MainWindow)
         self.actionNew_File.setObjectName("actionNew_File")
         self.actionOpen_File = QtGui.QAction(parent=MainWindow)
@@ -99,6 +96,7 @@ class Ui_MainWindow(object):
         self.actionDelete.setObjectName("actionDelete")
         self.actionSelect_All = QtGui.QAction(parent=MainWindow)
         self.actionSelect_All.setObjectName("actionSelect_All")
+        
         self.actionAutocorrelation = QtGui.QAction(parent=MainWindow)
         self.actionAutocorrelation.setObjectName("actionAutocorrelation")
         self.actionSpeed = QtGui.QAction(parent=MainWindow)
@@ -109,18 +107,25 @@ class Ui_MainWindow(object):
         self.actionDirectionality_Ratio.setObjectName("actionDirectionality_Ratio")
         self.actionp_value = QtGui.QAction(parent=MainWindow)
         self.actionp_value.setObjectName("actionp_value")
-        self.actionAutocorrelation_2 = QtGui.QAction(parent=MainWindow)
-        self.actionAutocorrelation_2.setObjectName("actionAutocorrelation_2")
-        self.actionSpeed_2 = QtGui.QAction(parent=MainWindow)
-        self.actionSpeed_2.setObjectName("actionSpeed_2")
-        self.actionMSD_2 = QtGui.QAction(parent=MainWindow)
-        self.actionMSD_2.setObjectName("actionMSD_2")
-        self.actionDirectionality_Ratio_2 = QtGui.QAction(parent=MainWindow)
-        self.actionDirectionality_Ratio_2.setObjectName("actionDirectionality_Ratio_2")
+        
         self.actionTrajectories = QtGui.QAction(parent=MainWindow)
         self.actionTrajectories.setObjectName("actionTrajectories")
-        self.toolBar.addAction(self.actionFile)
+        
+        self.toolBar.addAction(self.actionNew_File)
+        self.toolBar.addAction(self.actionOpen_File)
+        self.toolBar.addAction(self.actionSave)
+        
         self.toolBar.addSeparator()
+
+        self.toolBar.addAction(self.actionAutocorrelation)
+        self.toolBar.addAction(self.actionMSD)
+        self.toolBar.addAction(self.actionSpeed)
+        self.toolBar.addAction(self.actionDirectionality_Ratio)
+        self.toolBar.addSeparator()
+        
+        self.toolBar.addAction(self.actionTrajectories)
+
+
         self.menuFile.addAction(self.actionNew_File)
         self.menuFile.addAction(self.actionOpen_File)
         self.menuFile.addSeparator()
@@ -136,17 +141,16 @@ class Ui_MainWindow(object):
         self.menuEdit.addAction(self.actionDelete)
         self.menuEdit.addAction(self.actionSelect_All)
         self.menuEdit.addSeparator()
+        
         self.menuAnalyse.addAction(self.actionAutocorrelation)
         self.menuAnalyse.addAction(self.actionSpeed)
         self.menuAnalyse.addAction(self.actionMSD)
         self.menuAnalyse.addAction(self.actionDirectionality_Ratio)
         self.menuAnalyse.addSeparator()
         self.menuAnalyse.addAction(self.actionp_value)
-        self.menuPlot.addAction(self.actionAutocorrelation_2)
-        self.menuPlot.addAction(self.actionSpeed_2)
-        self.menuPlot.addAction(self.actionMSD_2)
-        self.menuPlot.addAction(self.actionDirectionality_Ratio_2)
+        
         self.menuPlot.addAction(self.actionTrajectories)
+        
         self.menuBar.addAction(self.menuFile.menuAction())
         self.menuBar.addAction(self.menuEdit.menuAction())
         self.menuBar.addAction(self.menuAnalyse.menuAction())
@@ -164,7 +168,6 @@ class Ui_MainWindow(object):
         self.menuEdit.setTitle(_translate("MainWindow", "Edit"))
         self.menuAnalyse.setTitle(_translate("MainWindow", "Analyse"))
         self.menuPlot.setTitle(_translate("MainWindow", "Plot"))
-        self.actionFile.setText(_translate("MainWindow", "File"))
         self.actionNew_File.setText(_translate("MainWindow", "New File"))
         self.actionOpen_File.setText(_translate("MainWindow", "Open File"))
         self.actionSave.setText(_translate("MainWindow", "Save"))
@@ -181,8 +184,4 @@ class Ui_MainWindow(object):
         self.actionMSD.setText(_translate("MainWindow", "MSD "))
         self.actionDirectionality_Ratio.setText(_translate("MainWindow", "Directionality Ratio"))
         self.actionp_value.setText(_translate("MainWindow", "p-value"))
-        self.actionAutocorrelation_2.setText(_translate("MainWindow", "Autocorrelation"))
-        self.actionSpeed_2.setText(_translate("MainWindow", "Speed"))
-        self.actionMSD_2.setText(_translate("MainWindow", "MSD"))
-        self.actionDirectionality_Ratio_2.setText(_translate("MainWindow", "Directionality Ratio"))
         self.actionTrajectories.setText(_translate("MainWindow", "Trajectories"))

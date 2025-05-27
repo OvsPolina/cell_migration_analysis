@@ -6,6 +6,9 @@ from ui.main_window.main_window import Ui_MainWindow  # импорт сгене�
 from src.ui_file import UIFile
 from src.ui_edit import UIEdit
 from src.Analysis.autocorrelation import UIAutocorrelation
+from src.Analysis.speed import UISpeed
+from src.Analysis.msd import UIMSD
+from src.Analysis.dir_ratio import UIDirRatio
 
 class CellMigration(QMainWindow):
     def __init__(self):
@@ -17,7 +20,10 @@ class CellMigration(QMainWindow):
 
         self.shortcuts()
         
-        self.config_autocorrelation = UIAutocorrelation(self.ui)
+        self.analysis_autocorrelation = UIAutocorrelation(self.ui)
+        self.analysis_speed = UISpeed(self.ui)
+        self.analysis_MSD = UIMSD(self.ui)
+        self.analysis_dirratio = UIDirRatio(self.ui)
     
     def shortcuts(self):
         copy_shortcut = QShortcut(QKeySequence.StandardKey.Copy, self)
