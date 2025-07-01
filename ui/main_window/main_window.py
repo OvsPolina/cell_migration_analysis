@@ -69,6 +69,8 @@ class Ui_MainWindow(object):
         self.menuEdit.setObjectName("menuEdit")
         self.menuAnalyse = QtWidgets.QMenu(parent=self.menuBar)
         self.menuAnalyse.setObjectName("menuAnalyse")
+        self.menuStatistics = QtWidgets.QMenu(parent=self.menuBar)
+        self.menuStatistics.setObjectName("menuStatistics")
         self.menuPlot = QtWidgets.QMenu(parent=self.menuBar)
         self.menuPlot.setObjectName("menuPlot")
         MainWindow.setMenuBar(self.menuBar)
@@ -110,6 +112,11 @@ class Ui_MainWindow(object):
         
         self.actionTrajectories = QtGui.QAction(parent=MainWindow)
         self.actionTrajectories.setObjectName("actionTrajectories")
+
+        self.actionTtest = QtGui.QAction(parent=MainWindow)
+        self.actionTtest.setObjectName("actiontTtest")
+        self.actionANOVA = QtGui.QAction(parent=MainWindow)
+        self.actionANOVA.setObjectName("actionANOVA")
         
         self.toolBar.addAction(self.actionNew_File)
         self.toolBar.addAction(self.actionOpen_File)
@@ -148,12 +155,16 @@ class Ui_MainWindow(object):
         self.menuAnalyse.addAction(self.actionDirectionality_Ratio)
         self.menuAnalyse.addSeparator()
         self.menuAnalyse.addAction(self.actionp_value)
+
+        self.menuStatistics.addAction(self.actionTtest)
+        self.menuStatistics.addAction(self.actionANOVA)
         
         self.menuPlot.addAction(self.actionTrajectories)
         
         self.menuBar.addAction(self.menuFile.menuAction())
         self.menuBar.addAction(self.menuEdit.menuAction())
         self.menuBar.addAction(self.menuAnalyse.menuAction())
+        self.menuBar.addAction(self.menuStatistics.menuAction())
         self.menuBar.addAction(self.menuPlot.menuAction())
 
         self.retranslateUi(MainWindow)
@@ -167,6 +178,7 @@ class Ui_MainWindow(object):
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.menuEdit.setTitle(_translate("MainWindow", "Edit"))
         self.menuAnalyse.setTitle(_translate("MainWindow", "Analyse"))
+        self.menuStatistics.setTitle(_translate("MainWindow", "Statistics"))
         self.menuPlot.setTitle(_translate("MainWindow", "Plot"))
         self.actionNew_File.setText(_translate("MainWindow", "New File"))
         self.actionOpen_File.setText(_translate("MainWindow", "Open File"))
@@ -185,3 +197,5 @@ class Ui_MainWindow(object):
         self.actionDirectionality_Ratio.setText(_translate("MainWindow", "Directionality Ratio"))
         self.actionp_value.setText(_translate("MainWindow", "p-value"))
         self.actionTrajectories.setText(_translate("MainWindow", "Trajectories"))
+        self.actionTtest.setText(_translate("MainWindow", "T test"))
+        self.actionANOVA.setText(_translate("MainWindow", "ANOVA"))

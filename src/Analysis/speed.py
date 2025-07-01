@@ -169,31 +169,51 @@ class UISpeed(QWidget):
         return result_df
     
     def speed(self, data):
-        data['ΔX'] = np.nan
-        data['ΔY'] = np.nan
-        data["time"] = np.nan
-        data["distance_bw_points"] = np.nan
-        data["instant_speed"] = np.nan
-        data["avg_speed_by_cell"] = np.nan
+        calculate_dxdy = False
+        calculate_time = False
+        calculate_dbp = False
+        calculate_speed = False
 
+        if 'ΔX' not in data.columns or 'ΔY' not in data.columns:
+            data['ΔX'] = np.nan
+            data['ΔY'] = np.nan
+            calculate_dxdy = True
+        
+        if 'time' not in data.columns:
+            data['time'] = np.nan
+            calculate_time = True
+
+        if 'distance_bw_points' not in data.columns:
+            data['distance_bw_points'] = np.nan
+            calculate_dbp = True
+
+        if 'instant_speed' not in data.columns:
+            data["instant_speed"] = np.nan
+            calculate_speed = True
+            
+        data["avg_speed_by_cell"] = np.nan
         data["avg_speed_of_condition"] = np.nan
 
         avg_speeds = []
 
         for track_id in sorted(data["Track n"].unique()):
-            track_df = data[data["Track n"] == track_id].sort_values("Slice n").reset_index()
+            track_df = data[data["Track n"] == track_id].sort_values("Slice n")
 
-            track_df['ΔX'] = track_df['X'].diff()
-            track_df['ΔY'] = track_df['Y'].diff()
+            if calculate_dxdy:
+                track_df['ΔX'] = track_df['X'].diff()
+                track_df['ΔY'] = track_df['Y'].diff()
             
-            track_df['distance_bw_points'] = np.sqrt(track_df['ΔX']**2 + track_df['ΔY']**2)
+            if calculate_dbp:
+                track_df['distance_bw_points'] = np.sqrt(track_df['ΔX']**2 + track_df['ΔY']**2)
 
-            track_df["time"] = track_df.index * self.values['time_interval']
+            if calculate_time:
+                track_df["time"] = track_df["Slice n"] * self.values['time_interval']
 
-            dx = track_df['distance_bw_points'].to_numpy()
-            dy = track_df['time'].to_numpy()
-            
-            track_df["instant_speed"] = dx / dy
+            if calculate_speed:
+                dx = track_df['distance_bw_points'].to_numpy()
+                dy = track_df['time'].to_numpy()
+                
+                track_df["instant_speed"] = dx / dy
 
             avg = track_df["instant_speed"].mean(skipna=True)
             avg_speeds.append(avg)

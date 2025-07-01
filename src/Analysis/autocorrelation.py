@@ -174,17 +174,22 @@ class UIAutocorrelation(QWidget):
         return result_df
     
     def norm(self, data):
-        data['ΔX'] = np.nan
-        data['ΔY'] = np.nan
+        calculate_dxdy = False
+
+        if 'ΔX' not in data.columns or 'ΔY' not in data.columns:
+            data['ΔX'] = np.nan
+            data['ΔY'] = np.nan
+            calculate_dxdy = True
+
         data["magnitude"] = np.nan
         data["cos_theta"] = np.nan
         data["sin_theta"] = np.nan
 
         for track_id in sorted(data["Track n"].unique()):
             track_df = data[data["Track n"] == track_id].sort_values("Slice n")
-
-            track_df['ΔX'] = track_df['X'].diff()
-            track_df['ΔY'] = track_df['Y'].diff()
+            if calculate_dxdy:
+                track_df['ΔX'] = track_df['X'].diff()
+                track_df['ΔY'] = track_df['Y'].diff()
             data.loc[track_df.index, 'ΔX'] = track_df["ΔX"].values
             data.loc[track_df.index, 'ΔY'] = track_df["ΔY"].values
             

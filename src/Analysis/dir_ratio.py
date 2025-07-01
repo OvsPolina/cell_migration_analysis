@@ -170,13 +170,30 @@ class UIDirRatio(QWidget):
         return result_df
     
     def dir_ratio(self, data):
-        data['ΔX'] = np.nan
-        data['ΔY'] = np.nan
+        calculate_dxdy = False
+        calculate_time = False
+        calculate_dbp = False
+        calculate_speed = False
+
+        if 'ΔX' not in data.columns or 'ΔY' not in data.columns:
+            data['ΔX'] = np.nan
+            data['ΔY'] = np.nan
+            calculate_dxdy = True
+        
+        if 'time' not in data.columns:
+            data['time'] = np.nan
+            calculate_time = True
+
+        if 'distance_bw_points' not in data.columns:
+            data['distance_bw_points'] = np.nan
+            calculate_dbp = True
+
+        if 'instant_speed' not in data.columns:
+            data["instant_speed"] = np.nan
+            calculate_speed = True
+
         data['Δ(xi-x0)'] = np.nan
         data['Δ(yi-y0)'] = np.nan
-        data['time'] = np.nan
-        data['distance_bw_points'] = np.nan
-        data["instant_speed"] = np.nan
         data["distance_to_start"] = np.nan
         data["cumulative_distance"] = np.nan
         data["dir_ratio"] = np.nan
@@ -186,27 +203,30 @@ class UIDirRatio(QWidget):
         avr_dir = []
 
         for track_id in sorted(data["Track n"].unique()):
-            track_df = data[data["Track n"] == track_id].sort_values("Slice n").reset_index()
+            track_df = data[data["Track n"] == track_id].sort_values("Slice n")
 
-            track_df['ΔX'] = track_df['X'].diff()
-            track_df['ΔY'] = track_df['Y'].diff()
+            if calculate_dxdy:
+                track_df['ΔX'] = track_df['X'].diff()
+                track_df['ΔY'] = track_df['Y'].diff()
 
             dx = track_df['X'].to_numpy()
             dy = track_df['Y'].to_numpy()
             track_df['Δ(xi-x0)'] = dx - dx[0]
             track_df['Δ(yi-y0)'] = dy - dy[0]
             
-            track_df['distance_bw_points'] = np.sqrt(track_df['ΔX']**2 + track_df['ΔY']**2)
+            if calculate_dbp:
+                track_df['distance_bw_points'] = np.sqrt(track_df['ΔX']**2 + track_df['ΔY']**2)
             
             track_df['distance_to_start'] = np.sqrt(track_df['Δ(xi-x0)']**2 + track_df['Δ(yi-y0)']**2)
             track_df['cumulative_distance'] = track_df['distance_bw_points'].fillna(0).cumsum()
 
-            track_df["time"] = track_df.index * self.values['time_interval']
+            if calculate_time:
+                track_df["time"] = track_df["Slice n"] * self.values['time_interval']
 
-            dx = track_df['distance_bw_points'].to_numpy()
-            dy = track_df['time'].to_numpy()
-            
-            track_df["instant_speed"] = dx / dy
+            if calculate_speed:
+                dx = track_df['distance_bw_points'].to_numpy()
+                dy = track_df['time'].to_numpy()
+                track_df["instant_speed"] = dx / dy
 
             track_df["dir_ratio"] = track_df["distance_to_start"] / track_df["cumulative_distance"]
             track_df["dir_ratio"] = track_df["dir_ratio"].replace([np.inf, -np.inf], np.nan)

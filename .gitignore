@@ -5,3 +5,4 @@ migration/
 *.numbers
 
 temp/
+tmp/

@@ -127,7 +127,7 @@ class UIFile(QWidget):
     
     def new_file(self):
         try:
-            temp_dir = os.path.join(os.getcwd(), "temp")
+            temp_dir = os.path.join(os.getcwd(), "tmp")
             os.makedirs(temp_dir, exist_ok=True)
             new_file_path = self.get_new_filename(temp_dir)
             new_file_path = Path(new_file_path)
@@ -187,7 +187,7 @@ class UIFile(QWidget):
             return
 
         file_path = page.filename  # объект Path
-        temp_dir = Path.cwd() / "temp"
+        temp_dir = Path.cwd() / "tmp"
 
         if temp_dir in file_path.parents:
             # Если временный файл — вызываем Save As

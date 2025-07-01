@@ -171,7 +171,11 @@ class UIMSD(QWidget):
         return result_df
     
     def msd(self, data):
-        data['time'] = np.nan
+        calculate_time = False
+        if 'time' not in data.columns:
+            data['time'] = np.nan
+            calculate_time = True
+        
         data['avg_msd_by_time_cell'] = np.nan
         data["avg_msd_by_time_condition"] = np.nan
         data["sem_by_time_condition"] = np.nan
@@ -181,8 +185,9 @@ class UIMSD(QWidget):
         for track_id in sorted(data["Track n"].unique()):
             track_df = data[data["Track n"] == track_id].sort_values("Slice n")
 
-            track_df['time'] = track_df['Slice n'] * self.values['time_interval']
-            data.loc[track_df.index, 'time'] = track_df["time"].values
+            if calculate_time:
+                track_df['time'] = track_df['Slice n'] * self.values['time_interval']
+                data.loc[track_df.index, 'time'] = track_df["time"].values
 
             # Calculate MSD
             msd = np.zeros(self.values['n_time_points'])

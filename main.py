@@ -1,6 +1,7 @@
 # app.py
 from PyQt6.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox
 from PyQt6.QtGui import QShortcut, QKeySequence
+import os
 
 from ui.main_window.main_window import Ui_MainWindow  # импорт сгенерированного интерфейса
 from src.ui_file import UIFile
@@ -9,6 +10,9 @@ from src.Analysis.autocorrelation import UIAutocorrelation
 from src.Analysis.speed import UISpeed
 from src.Analysis.msd import UIMSD
 from src.Analysis.dir_ratio import UIDirRatio
+
+from src.Statistics.ttest import UITTest
+from src.Statistics.anova import UIANOVA
 
 class CellMigration(QMainWindow):
     def __init__(self):
@@ -24,6 +28,10 @@ class CellMigration(QMainWindow):
         self.analysis_speed = UISpeed(self.ui)
         self.analysis_MSD = UIMSD(self.ui)
         self.analysis_dirratio = UIDirRatio(self.ui)
+
+        self.stat_ttest = UITTest(self.ui)
+        self.stat_anova = UIANOVA(self.ui)
+
     
     def shortcuts(self):
         copy_shortcut = QShortcut(QKeySequence.StandardKey.Copy, self)
@@ -40,6 +48,26 @@ class CellMigration(QMainWindow):
 
         redo_shortcut = QShortcut(QKeySequence.StandardKey.Redo, self)
         redo_shortcut.activated.connect(self.edit.redo_action)
+
+    def closeEvent(self, event):
+        reply = QMessageBox.question(
+            self,
+            "Exit",
+            "Do you want to exit the application? All the unsaved data will be deleted.",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No
+        )
+
+        if reply == QMessageBox.StandardButton.Yes:
+            temp_path = os.path.join(os.getcwd(), "tmp")
+            if os.path.exists(temp_path):
+                for filename in os.listdir(temp_path):
+                    file_path = os.path.join(temp_path, filename)
+                    if os.path.isfile(file_path):
+                        os.remove(file_path)
+            event.accept()  # Закрыть окно
+        else:
+            event.ignore()  # Остановить закрытие
 
 
 
