@@ -1,21 +1,16 @@
 import os
-import sys
 from pathlib import Path
 from PyQt6.QtWidgets import (
-    QApplication, QMainWindow, QFileDialog, QMessageBox, QWidget, QTableView, QTableWidgetItem, QTreeWidgetItem, QTabWidget, QVBoxLayout, QHeaderView
+    QFileDialog, QMessageBox, QWidget, QTableView, QTreeWidgetItem, QTabWidget, QVBoxLayout, QHeaderView
 )
 import pandas as pd
 import string
-
-from openpyxl import Workbook
-from openpyxl.utils.dataframe import dataframe_to_rows
-import openpyxl
 
 from src.data_model import DataModel
 
 class UIFile(QWidget):
     def __init__(self, ui):
-        super().__init__()  # нужно вызвать, чтобы QWidget инициализировался корректно
+        super().__init__()
         self.ui = ui
         self.tabs_data_models = {}
         self._connect_signals()
@@ -28,55 +23,59 @@ class UIFile(QWidget):
         self.ui.treeWidget.itemClicked.connect(self.on_tree_item_clicked)
 
     def open_file(self):
-        file_path, _ = QFileDialog.getOpenFileName(self, "Open Excel File", "", "Excel files (*.xlsx *.xls *.xlsm)")
-        if not file_path:
+        file_paths, _ = QFileDialog.getOpenFileNames(self, "Open Excel File", "", "Excel files (*.xlsx *.xls *.xlsm)")
+        if not file_paths:
             return
-        file_path = Path(file_path)
-        try:
-            excel_data = pd.read_excel(file_path, sheet_name=None, engine='openpyxl')
-        except Exception as e:
-            QMessageBox.critical(self, "Error", f"Cannot open the file:\n{e}")
-            return
-
         
-        # Добавляем новый корневой элемент в дерево для файла
         self.ui.treeWidget.show()
         total_width = self.ui.splitter.width()
         self.ui.splitter.setSizes([int(total_width * 0.3), int(total_width * 0.7)])
-        file_root = QTreeWidgetItem([file_path.name])
-        self.ui.treeWidget.addTopLevelItem(file_root)
 
-        # Создаем новый виджет страницы и таб виджет для листов
-        page = QWidget()
-        page.filename = file_path
-        layout = QVBoxLayout(page)  # Внутренний layout для страницы
-    
-        tab_widget = QTabWidget()
-        layout.addWidget(tab_widget)
+        for file_path in file_paths:
+            file_path = Path(file_path)
+            try:
+                excel_data = pd.read_excel(file_path, sheet_name=None, engine='openpyxl')
+            except Exception as e:
+                QMessageBox.critical(self, "Error", f"Cannot open the file:\n{e}")
+                continue #skip file with error
+
+            # Add root to the filetree
+
+            file_root = QTreeWidgetItem([file_path.name])
+            self.ui.treeWidget.addTopLevelItem(file_root)
+
+            # Create new widget for the page and tab widget for sheets
+            page = QWidget()
+            page.filename = file_path
+            layout = QVBoxLayout(page)
         
-        # Добавляем вкладки с листами
-        for sheet_name, df in excel_data.items():
-            table = QTableView()
-            data_model = DataModel(df)
-            table.setModel(data_model)
-            table.setSortingEnabled(True)
-            table.resizeColumnsToContents()
+            tab_widget = QTabWidget()
+            layout.addWidget(tab_widget)
+            
+            # Add sheets
+            for sheet_name, df in excel_data.items():
+                table = QTableView()
+                data_model = DataModel(df)
+                table.setModel(data_model)
+                table.setSortingEnabled(True)
+                table.resizeColumnsToContents()
 
-            self.tabs_data_models[sheet_name] = data_model
+                self.tabs_data_models[sheet_name] = data_model
 
-            tab_widget.addTab(table, sheet_name)
+                tab_widget.addTab(table, sheet_name)
 
-            # Добавляем лист в дерево
-            sheet_item = QTreeWidgetItem([sheet_name])
-            file_root.addChild(sheet_item)
+                # Add sheet to the tree
+                sheet_item = QTreeWidgetItem([sheet_name])
+                file_root.addChild(sheet_item)
 
-        file_root.setExpanded(True)
+            file_root.setExpanded(True)
 
-        # Добавляем страницу с табами в stackedWidget
-        self.ui.stackedWidget.addWidget(page)
+            # Add page with tabs to the stackedWidget
+            self.ui.stackedWidget.addWidget(page)
 
-        # Переключаемся на только что добавленную страницу (индекс -1 - последний)
-        self.ui.stackedWidget.setCurrentWidget(page)
+        # Go to the last added page
+        if self.ui.stackedWidget.count() > 0:
+            self.ui.stackedWidget.setCurrentWidget(page)
 
     def on_tree_item_clicked(self, item):
         parent = item.parent()

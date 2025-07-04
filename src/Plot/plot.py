@@ -29,6 +29,7 @@ class PlotDialog(QDialog):
         """
         plot_func — функция, которая принимает Axes и рисует на нем график
         """
+        self.figure.clear()
         ax = self.figure.add_subplot(111)
         plot_func(ax)
         self.canvas.draw()

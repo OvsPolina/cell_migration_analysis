@@ -6,10 +6,8 @@ import os
 from ui.main_window.main_window import Ui_MainWindow  # импорт сгенерированного интерфейса
 from src.ui_file import UIFile
 from src.ui_edit import UIEdit
-from src.Analysis.autocorrelation import UIAutocorrelation
-from src.Analysis.speed import UISpeed
-from src.Analysis.msd import UIMSD
-from src.Analysis.dir_ratio import UIDirRatio
+from src.Analysis.analysis_class import UIAnalysis
+
 
 from src.Statistics.ttest import UITTest
 from src.Statistics.anova import UIANOVA
@@ -24,11 +22,8 @@ class CellMigration(QMainWindow):
 
         self.shortcuts()
         
-        self.analysis_autocorrelation = UIAutocorrelation(self.ui)
-        self.analysis_speed = UISpeed(self.ui)
-        self.analysis_MSD = UIMSD(self.ui)
-        self.analysis_dirratio = UIDirRatio(self.ui)
-
+        self.analysis = UIAnalysis(self.ui)
+        
         self.stat_ttest = UITTest(self.ui)
         self.stat_anova = UIANOVA(self.ui)
 

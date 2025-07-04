@@ -131,6 +131,10 @@ class Ui_MainWindow(object):
         self.toolBar.addSeparator()
         
         self.toolBar.addAction(self.actionTrajectories)
+        self.toolBar.addSeparator()
+
+        self.toolBar.addAction(self.actionTtest)
+        self.toolBar.addAction(self.actionANOVA)
 
 
         self.menuFile.addAction(self.actionNew_File)
