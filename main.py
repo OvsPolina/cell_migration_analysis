@@ -9,8 +9,7 @@ from src.ui_edit import UIEdit
 from src.Analysis.analysis_class import UIAnalysis
 
 
-from src.Statistics.ttest import UITTest
-from src.Statistics.anova import UIANOVA
+from src.Statistics.stat_class import UIStat
 
 class CellMigration(QMainWindow):
     def __init__(self):
@@ -24,8 +23,7 @@ class CellMigration(QMainWindow):
         
         self.analysis = UIAnalysis(self.ui)
         
-        self.stat_ttest = UITTest(self.ui)
-        self.stat_anova = UIANOVA(self.ui)
+        self.stat = UIStat(self.ui)
 
     
     def shortcuts(self):

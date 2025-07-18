@@ -29,15 +29,6 @@ class Ui_StatsWindow(object):
         self.tableView.setObjectName("tableView")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.ItemRole.SpanningRole, self.tableView)
 
-        # self.buttonBox = QtWidgets.QDialogButtonBox(parent=self.formLayoutWidget)
-        # self.buttonBox.setOrientation(QtCore.Qt.Orientation.Horizontal)
-        # self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.StandardButton.Cancel|QtWidgets.QDialogButtonBox.StandardButton.Ok)
-        # self.buttonBox.setCenterButtons(False)
-        # self.buttonBox.setObjectName("buttonBox")
-        # self.formLayout.setAlignment(self.buttonBox, QtCore.Qt.AlignmentFlag.AlignLeft)
-        
-        # self.formLayout.setWidget(1, QtWidgets.QFormLayout.ItemRole.FieldRole, self.buttonBox)
-        
         # Обёртка для кнопок
         self.buttonLayoutWidget = QtWidgets.QWidget(self.formLayoutWidget)
         self.buttonLayout = QtWidgets.QHBoxLayout(self.buttonLayoutWidget)

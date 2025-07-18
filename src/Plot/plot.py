@@ -2,10 +2,13 @@ from PyQt6.QtWidgets import QDialog, QVBoxLayout, QFileDialog
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from ui.plot.plot_window import Ui_Plot  # путь к сгенерированному UI-классу
+import os
 
 class PlotDialog(QDialog):
-    def __init__(self, parent=None, title="Plot"):
+    def __init__(self, filename, analysis, title="Plot", parent=None):
         super().__init__(parent)
+        self.filename = filename
+        self.analysis = analysis
         self.ui = Ui_Plot()
         self.ui.setupUi(self)
         self.setWindowTitle(title)
@@ -21,7 +24,8 @@ class PlotDialog(QDialog):
         self.ui.buttonBox.rejected.connect(self.reject)
 
     def save_figure(self):
-        path, _ = QFileDialog.getSaveFileName(self, "Save Plot", "", "PNG Files (*.png);;PDF Files (*.pdf);;All Files (*)")
+        file = os.path.basename(self.filename[0])
+        path, _ = QFileDialog.getSaveFileName(self, "Save Plot", f"{file} {self.analysis}", "PNG Files (*.png);;PDF Files (*.pdf);;All Files (*)")
         if path:
             self.figure.savefig(path)
 
@@ -33,4 +37,4 @@ class PlotDialog(QDialog):
         ax = self.figure.add_subplot(111)
         plot_func(ax)
         self.canvas.draw()
-        self.exec()
+        self.show()

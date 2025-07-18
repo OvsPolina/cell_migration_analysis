@@ -13,12 +13,14 @@ class Ui_ChooseSampleWindow(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(466, 596)
-        self.verticalLayoutWidget = QtWidgets.QWidget(parent=Dialog)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(10, 10, 441, 581))
-        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
+
+        self.verticalLayout = QtWidgets.QVBoxLayout(Dialog)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
+        
+        self.verticalLayoutWidget = QtWidgets.QWidget(parent=Dialog)
+        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
+        
         self.treeWidget = QtWidgets.QTreeWidget(parent=self.verticalLayoutWidget)
         self.treeWidget.setEditTriggers(QtWidgets.QAbstractItemView.EditTrigger.DoubleClicked|QtWidgets.QAbstractItemView.EditTrigger.EditKeyPressed|QtWidgets.QAbstractItemView.EditTrigger.SelectedClicked)
         self.treeWidget.setSelectionMode(QtWidgets.QAbstractItemView.SelectionMode.MultiSelection)
@@ -26,11 +28,14 @@ class Ui_ChooseSampleWindow(object):
         self.treeWidget.setObjectName("treeWidget")
         self.treeWidget.headerItem().setText(0, "1")
         self.treeWidget.header().setVisible(False)
+        
         self.verticalLayout.addWidget(self.treeWidget)
+        
         self.buttonBox = QtWidgets.QDialogButtonBox(parent=self.verticalLayoutWidget)
         self.buttonBox.setOrientation(QtCore.Qt.Orientation.Horizontal)
         self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.StandardButton.Cancel|QtWidgets.QDialogButtonBox.StandardButton.Ok)
         self.buttonBox.setObjectName("buttonBox")
+        
         self.verticalLayout.addWidget(self.buttonBox)
 
         self.retranslateUi(Dialog)

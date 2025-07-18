@@ -1,12 +1,15 @@
 import os
 from pathlib import Path
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
     QFileDialog, QMessageBox, QWidget, QTableView, QTreeWidgetItem, QTabWidget, QVBoxLayout, QHeaderView
 )
 import pandas as pd
 import string
+import pandera.pandas as pa
 
 from src.data_model import DataModel
+from src.utils.input_data import input_schema
 
 class UIFile(QWidget):
     def __init__(self, ui):
@@ -35,6 +38,18 @@ class UIFile(QWidget):
             file_path = Path(file_path)
             try:
                 excel_data = pd.read_excel(file_path, sheet_name=None, engine='openpyxl')
+                for sheet_name, df in excel_data.items():
+                    try:
+                        df["Track n"] = df["Track n"].astype(float)
+                        df["Slice n"] = df["Slice n"].astype(float)
+                        df["X"] = df["X"].astype(float)
+                        df["Y"] = df["Y"].astype(float)
+                        df = df.dropna(how="all")
+                        validated = input_schema.validate(df)
+                        # do something with validated data if needed
+                    except pa.errors.SchemaError as e:
+                        QMessageBox.critical(self, "Error", f"Not correct data in the sheet '{sheet_name}': {e}")
+
             except Exception as e:
                 QMessageBox.critical(self, "Error", f"Cannot open the file:\n{e}")
                 continue #skip file with error
@@ -42,6 +57,7 @@ class UIFile(QWidget):
             # Add root to the filetree
 
             file_root = QTreeWidgetItem([file_path.name])
+            file_root.setData(0, Qt.ItemDataRole.UserRole, {"unsaved_changes": False})
             self.ui.treeWidget.addTopLevelItem(file_root)
 
             # Create new widget for the page and tab widget for sheets
@@ -51,6 +67,8 @@ class UIFile(QWidget):
         
             tab_widget = QTabWidget()
             layout.addWidget(tab_widget)
+            
+            page.tree_item = file_root
             
             # Add sheets
             for sheet_name, df in excel_data.items():
@@ -66,6 +84,12 @@ class UIFile(QWidget):
 
                 # Add sheet to the tree
                 sheet_item = QTreeWidgetItem([sheet_name])
+                sheet_item.setData(0, Qt.ItemDataRole.UserRole, {"unsaved_changes": False})
+                # Связываем элемент дерева с таблицей (виджетом)
+                sheet_item.table_widget = table
+
+                # И наоборот — сохраняем в таблице ссылку на элемент дерева
+                table.tree_item = sheet_item
                 file_root.addChild(sheet_item)
 
             file_root.setExpanded(True)
@@ -172,6 +196,7 @@ class UIFile(QWidget):
 
         # дерево: лист
         sheet_item = QTreeWidgetItem(["Sheet1"])
+        sheet_item.setData(0, Qt.ItemDataRole.UserRole, {"unsaved_changes": False})
         file_root.addChild(sheet_item)
         file_root.setExpanded(True)
 
@@ -198,6 +223,21 @@ class UIFile(QWidget):
             return
         else:
             self._save_page_to_file(page, file_path)
+
+        # После успешного сохранения меняем флаг у всех дочерних элементов дерева файла
+        tree_item = getattr(page, "tree_item", None)
+        if tree_item is not None:
+            # Сам файл — корень, выставляем флаг тоже
+            data = tree_item.data(0, Qt.ItemDataRole.UserRole) or {}
+            data["unsaved_changes"] = False
+            tree_item.setData(0, Qt.ItemDataRole.UserRole, data)
+
+            # Пройдемся по всем листам (дочерним элементам)
+            for i in range(tree_item.childCount()):
+                child = tree_item.child(i)
+                data = child.data(0, Qt.ItemDataRole.UserRole) or {}
+                data["unsaved_changes"] = False
+                child.setData(0, Qt.ItemDataRole.UserRole, data)
 
     def save_as_file(self):
         page = self.ui.stackedWidget.currentWidget()

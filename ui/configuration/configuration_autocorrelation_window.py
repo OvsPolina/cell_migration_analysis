@@ -14,9 +14,13 @@ class Ui_ConfigurationAutocorrelationWindow(object):
         Dialog.setObjectName("Dialog")
         Dialog.resize(371, 211)
 
+        self.verticalLayout = QtWidgets.QVBoxLayout(Dialog)
+        self.verticalLayout.setContentsMargins(10, 10, 10, 10)
+        self.verticalLayout.setObjectName("verticalLayout")
+
         self.formLayoutWidget = QtWidgets.QWidget(parent=Dialog)
-        self.formLayoutWidget.setGeometry(QtCore.QRect(9, 9, 351, 191))
         self.formLayoutWidget.setObjectName("formLayoutWidget")
+        
         self.formLayout = QtWidgets.QFormLayout(self.formLayoutWidget)
         self.formLayout.setContentsMargins(0, 0, 0, 0)
         self.formLayout.setObjectName("formLayout")
@@ -63,7 +67,10 @@ class Ui_ConfigurationAutocorrelationWindow(object):
         self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.StandardButton.Cancel|QtWidgets.QDialogButtonBox.StandardButton.Ok)
         self.buttonBox.setCenterButtons(False)
         self.buttonBox.setObjectName("buttonBox")
+        
         self.formLayout.setWidget(4, QtWidgets.QFormLayout.ItemRole.FieldRole, self.buttonBox)
+
+        self.verticalLayout.addWidget(self.formLayoutWidget)
 
         self.retranslateUi(Dialog)
         self.buttonBox.accepted.connect(Dialog.accept) # type: ignore
@@ -72,7 +79,7 @@ class Ui_ConfigurationAutocorrelationWindow(object):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Autocorrelation Configuration"))
+        Dialog.setWindowTitle(_translate("Dialog", "Parameter Configuration"))
         self.time_interval.setText(_translate("Dialog", "Time Interval (min)"))
         self.n_time_points.setText(_translate("Dialog", "Number of time points"))
         self.n_tracks.setText(_translate("Dialog", "Number of tracks (cells)"))
