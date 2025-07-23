@@ -222,8 +222,6 @@ project/
 * Python 3.8+
 * Pip
 
-Sure! Here’s the README installation and usage instruction template in English, covering the three scenarios you asked for:
-
 ---
 
 ## 🧩 Technologies Used
