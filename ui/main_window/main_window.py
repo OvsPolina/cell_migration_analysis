@@ -32,6 +32,8 @@ class Ui_MainWindow(object):
         self.treeWidget = QtWidgets.QTreeWidget(self.centralwidget)
         self.treeWidget.setAcceptDrops(True)
         self.treeWidget.setObjectName("treeWidget")
+        self.treeWidget.setColumnCount(1)
+        self.treeWidget.setHeaderLabels(["Opened Files"])
         self.horizontalLayout.addWidget(self.treeWidget)
 
         # Stacked widget - layout left

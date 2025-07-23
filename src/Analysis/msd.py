@@ -1,6 +1,16 @@
 import numpy as np
+from logger import app_logger as logger
 
 class MSD():
+    """
+    Calculates Mean Squared Displacement (MSD) for tracked objects.
+
+    Args:
+        data (pd.DataFrame): Trajectory data with 'Track n', 'Slice n', 'X', 'Y'.
+        values (dict): Parameters, must contain:
+            - 'time_interval': interval between slices
+            - 'n_time_points': number of time steps to analyze
+    """
     def __init__(self, data, values):
         super().__init__()
         self.data = data
@@ -9,11 +19,19 @@ class MSD():
         self.msd()
     
     def msd(self):
+        """
+        Main MSD computation method. Calculates:
+        - Per-cell MSD over time
+        - Average MSD across all cells
+        - SEM (standard error of the mean) of MSD
+        """
+
         calculate_time = False
         if 'time' not in self.data.columns:
             self.data['time'] = np.nan
             calculate_time = True
         
+        # Initialize result columns
         self.data['avg_msd_by_time_cell'] = np.nan
         self.data["avg_msd_by_time_condition"] = np.nan
         self.data["sem_by_time_condition"] = np.nan
@@ -50,15 +68,22 @@ class MSD():
             self.data.loc[:self.values['n_time_points']-1, "sem_by_time_condition"] = err
 
 def plot_msd(ax, avg_msd_data, values):
-    # Для каждого набора данных
+    """
+    Plots the average Mean Squared Displacement with SEM error bars.
+
+    Args:
+        ax (matplotlib.axes.Axes): Axes to plot on.
+        avg_msd_data (list of tuples): Each tuple = (DataFrame, label).
+        values (dict): Must contain 'time_interval'.
+    """
     for df, label in avg_msd_data:
         if 'avg_msd_by_time_condition' not in df.columns or 'sem_by_time_condition' not in df.columns:
-            continue  # Пропускаем, если нет нужных колонок
+            logger.warning(f"Skipping {label} — required MSD columns missing.")
+            continue  
 
-        # Предполагается, что есть n строк с msd_avg и msd_err
         y = df['avg_msd_by_time_condition'].dropna().values
         yerr = df['sem_by_time_condition'].dropna().values
-        x = np.arange(len(y)) * values['time_interval']  # временная шкала
+        x = np.arange(len(y)) * values['time_interval'] 
 
         ax.errorbar(x, y, yerr=yerr, fmt='o-', capsize=4, label=label)
 

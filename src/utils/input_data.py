@@ -1,18 +1,30 @@
+# This code uses pandera library to validate the input data in the application
+
+
 import pandas as pd
 import pandera.pandas as pa
 from pandera.pandas import Column, DataFrameSchema, Check
 
 def is_slice_continuous(df: pd.DataFrame) -> bool:
-    # For each group by "Track n", check that "Slice n" passes `is_slice_continuous`
+    """
+    Checks that for each 'Track n', the 'Slice n' values form a continuous sequence
+    (i.e., no missing or duplicated slice numbers within a track).
+
+    Args:
+        df (pd.DataFrame): Input DataFrame.
+
+    Returns:
+        bool: True if all 'Track n' groups have continuous 'Slice n' values, False otherwise.
+    """
+    # For each track n
     for _, group in df.groupby("Track n"):
+        # Sort and drop NaN values
         slices = group["Slice n"].dropna().sort_values().astype(int)
+        # Create thelist of expected values in the slice column (continuous)
         expected = list(range(slices.min(), slices.max() + 1))
         if slices.tolist() != expected:
             return False
     return True
-
-def is_int_or_float(series):
-    return series.apply(lambda x: isinstance(x, (int, float))).all()
 
 input_schema = DataFrameSchema({
     "Track n": Column(pa.Float, nullable=False),

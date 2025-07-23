@@ -1,18 +1,23 @@
-# app.py
-from PyQt6.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox
+from PyQt6.QtWidgets import QApplication, QMainWindow, QMessageBox
 from PyQt6.QtGui import QShortcut, QKeySequence
 import os
 
-from ui.main_window.main_window import Ui_MainWindow  # импорт сгенерированного интерфейса
+from logger import app_logger as logger
+
+# Interface import
+from ui.main_window.main_window import Ui_MainWindow 
+
+# Import application backend
 from src.ui_file import UIFile
 from src.ui_edit import UIEdit
+
+# Import calculating module
 from src.Analysis.analysis_class import UIAnalysis
-
-
 from src.Statistics.stat_class import UIStat
 
 class CellMigration(QMainWindow):
     def __init__(self):
+        logger.info(f"Opened Application")
         super().__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
@@ -58,9 +63,10 @@ class CellMigration(QMainWindow):
                     file_path = os.path.join(temp_path, filename)
                     if os.path.isfile(file_path):
                         os.remove(file_path)
-            event.accept()  # Закрыть окно
+            logger.info(f"Closed Application")
+            event.accept() 
         else:
-            event.ignore()  # Остановить закрытие
+            event.ignore()
 
 
 

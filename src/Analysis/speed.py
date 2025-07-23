@@ -1,7 +1,15 @@
 import numpy as np
-
+from logger import app_logger as logger
 
 class Speed():
+    """
+    Computes average instantaneous speed per track and per condition.
+
+    Args:
+        data (pd.DataFrame): Trajectory data containing at least 'X', 'Y', 'Track n', 'Slice n'.
+        values (dict): Parameters, must contain:
+            - 'time_interval': interval between slices
+    """
     def __init__(self, data, values):
         super().__init__()
         self.data = data
@@ -10,6 +18,15 @@ class Speed():
         self.speed()
 
     def speed(self):
+        """
+        Main method to compute speed metrics:
+        - ΔX, ΔY
+        - Distance between points
+        - Instantaneous speed (distance / time)
+        - Average speed per cell
+        - Average and SEM speed per condition
+        """
+        # Flags to control which columns need to be computed
         calculate_dxdy = False
         calculate_time = False
         calculate_dbp = False
@@ -56,14 +73,15 @@ class Speed():
                 
                 track_df["instant_speed"] = dx / dy
 
+            # Average speed per track (ignoring NaNs)
             avg = track_df["instant_speed"].mean(skipna=True)
             avg_speeds.append(avg)
             
-            # Вставляем обратно все рассчитанные колонки
+            # Save computed columns back to the main DataFrame
             self.data.loc[track_df.index, ['ΔX', 'ΔY', 'distance_bw_points', 'time', 'instant_speed']] = \
                 track_df[['ΔX', 'ΔY', 'distance_bw_points', 'time', 'instant_speed']]
 
-            # Вставляем среднюю скорость в первую строку трека
+            # Store average speed in the first row of the track
             self.data.loc[track_df.index[0], "avg_speed_by_cell"] = avg
 
         if avg_speeds:
@@ -71,11 +89,17 @@ class Speed():
             err = np.std(avg_speeds, ddof=1) / np.sqrt(len(avg_speeds))
             combined = f"{avg:.3f} ± {err:.3f}"
 
-            # Запишем значение во все строки данного трека
             self.data.loc[0, "avg_speed_of_condition"] = avg
             self.data.loc[1, "avg_speed_of_condition"] = err
                     
 def plot_speed(ax, speed_data_by_condition):
+    """
+    Plots average speed per condition as a bar chart.
+
+    Args:
+        ax (matplotlib.axes.Axes): Axis to draw on.
+        speed_data_by_condition (list): List of tuples (DataFrame, label).
+    """
 
     labels = []
     avg_values = []
@@ -91,9 +115,8 @@ def plot_speed(ax, speed_data_by_condition):
             avg_values.append(avg_str)
             errors.append(err)
         except Exception as e:
-            print(f"Ошибка при обработке значения {vals}: {e}")
+            logger.exception(f"Error processing condition '{label}': {e}")
 
-    # Рисуем столбчатую диаграмму
     x = np.arange(len(labels))
 
     ax.bar(x, avg_values, yerr=errors, capsize=5, color='skyblue')
