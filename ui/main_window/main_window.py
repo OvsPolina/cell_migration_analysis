@@ -158,7 +158,6 @@ class Ui_MainWindow(object):
         self.menuAnalyse.addAction(self.actionMSD)
         self.menuAnalyse.addAction(self.actionDirectionality_Ratio)
         self.menuAnalyse.addSeparator()
-        self.menuAnalyse.addAction(self.actionp_value)
 
         self.menuStatistics.addAction(self.actionTtest)
         self.menuStatistics.addAction(self.actionANOVA)
@@ -199,7 +198,6 @@ class Ui_MainWindow(object):
         self.actionSpeed.setText(_translate("MainWindow", "Speed"))
         self.actionMSD.setText(_translate("MainWindow", "MSD "))
         self.actionDirectionality_Ratio.setText(_translate("MainWindow", "Directionality Ratio"))
-        self.actionp_value.setText(_translate("MainWindow", "p-value"))
         self.actionTrajectories.setText(_translate("MainWindow", "Trajectories"))
         self.actionTtest.setText(_translate("MainWindow", "T test"))
         self.actionANOVA.setText(_translate("MainWindow", "ANOVA"))

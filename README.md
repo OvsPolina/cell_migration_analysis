@@ -103,8 +103,8 @@ The main window contains several important buttons and panels that help you load
 
 ### Interface
 
-![Mac Interface](path/to/mac_screenshot.png)  
-*Figure 1: Main interface on macOS.*
+![Mac Interface](images/empty_main_window.png)  
+*Figure 1: Main window on macOS.*
 
 ![Windows Interface](path/to/windows_screenshot.png)  
 *Figure 2: Main interface on Windows.*
@@ -112,13 +112,24 @@ The main window contains several important buttons and panels that help you load
 
 ### File Menu
 
+![File Menu](images/file_menu.png)  
+*Figure 3: File menu.*
+
 * **New File**: Create a new blank project.
 * **Open File**: Load a file into the application.
 * **Save**: Save current work.
 * **Save as**: Save under a new filename.
 
+Buttons **New File**, **Open File**, **Save** are present in the Toolbar in the Main Window for fast acces.
+
+![Toolbar](images/toolbar.png)  
+*Figure 4: Toolbar, at the top of Main Window.*
+
 
 ### Edit Menu
+
+![Edit Menu](images/edit_menu.png)  
+*Figure 5: Edit menu.*
 
 * **Undo / Redo**: Standard undo/redo actions.
 * **Cut / Copy / Paste**: Modify data.
@@ -126,7 +137,10 @@ The main window contains several important buttons and panels that help you load
 * **Select All**: Select all items in current view.
 
 
-### Analyse Menu
+### Analysis Menu
+
+![Analysis Menu](images/analysis_menu.png)  
+*Figure 6: Analysis menu.*
 
 * **Autocorrelation**: Compute the persistence of direction over time.
 * **Speed**: Calculate the average speed of tracked cells.
@@ -135,16 +149,29 @@ The main window contains several important buttons and panels that help you load
 
 Each analyse presents a plot at the end that can be saved as PNG file.
 
+All buttons are presented in the Toolbar in the Main Window for fast acces.
+
 
 ### Statistics Menu
+
+![Stat Menu](images/stat_menu.png)  
+*Figure 7: Statistics menu.*
 
 * **T test**: Perform a two-sample pairwise T-test across conditions.
 * **ANOVA**: Perform analysis of variance across multiple conditions. If the p-value is significant, will present Pairwise Tukey HSD test results. Otherwise will show p-value.
 
+Each analyse presents a table at the end with the calculated results.
+
+All buttons are presented in the Toolbar in the Main Window for fast acces.
 
 ### Plot Menu
 
+![Plot Menu](images/plot_menu.png)  
+*Figure 8: Plot menu.*
+
 * **Trajectories**: Visualize cell movement tracks over time centered at (0,0).
+
+All buttons are presented in the Toolbar in the Main Window for fast acces.
 
 ---
 
@@ -153,21 +180,15 @@ Each analyse presents a plot at the end that can be saved as PNG file.
 1. **Open a File**
    Use `File > Open File` or the toolbar icon to import tracking data.
 
-   ![Mac Interface](path/to/mac_screenshot.png)  
-    *Figure 1: Main interface on macOS.*
+   ![Mac Interface](images/empty_main_window.png)  
+    *Figure 9: Main interface on macOS at the start point.*
 
     File and condition names appear in the table and tree widgets.
 
-2. **Select a Condition/Track**
-   Navigate the tree view to choose a file and condition. Data will be shown in the central panel - table.
+    ![Mac Interface](images/main_window.png)  
+    *Figure 10: Main interface on macOS with opened files.*
 
-   ![Mac Interface](path/to/mac_screenshot.png)  
-    *Figure 1: Main interface on macOS.*
-
-    ![Mac Interface](path/to/mac_screenshot.png)  
-    *Figure 1: Main interface on macOS.*
-
-3. **Run Analyses**
+2. **Run Analyses**
    Use the **Analyse** menu or toolbar to compute movement metrics like:
 
    * Speed
@@ -175,32 +196,58 @@ Each analyse presents a plot at the end that can be saved as PNG file.
    * Autocorrelation
    * Directionality Ratio
 
-   ![Mac Interface](path/to/mac_screenshot.png)  
-    *Figure 1: Main interface on macOS.*
+   After clicking on the needed analysis, the configuration window will appear:
 
-    ![Mac Interface](path/to/mac_screenshot.png)  
-    *Figure 1: Main interface on macOS.*
+   ![configuration](images/analysis_configuration_parameter_window.png)  
+    *Figure 11: Parameters' window.*
 
-    ![Mac Interface](path/to/mac_screenshot.png)  
-    *Figure 1: Main interface on macOS.*
+    Depending on the analysis, some of the parameters will be inactive.
 
-4. **Visualize Tracks**
-   Select **Plot > Trajectories** to see the paths of migrating cells.
+    After choosing the parameters, the user will be asked to choose the conditions that he wants to analyse:
 
-   ![Mac Interface](path/to/mac_screenshot.png)  
-    *Figure 1: Main interface on macOS.*
+    ![choose window](images/choose_sample_window.png)  
+    *Figure 12: Window for choosing conditions for the analysis.*
 
-5. **Perform Statistical Tests**
+    To choose a condition it should be clicked on in the window. The chosen conditions are higlighted. Conditions from different files can be chosen. 
+
+    The intermediate results (calculations) will be shown directly in the table, meanwhile plots will be displayed in a special window:
+
+    ![plot window](images/plot_window.png)  
+    *Figure 13: Result plot for Migration persistence for the chosen conditions*
+
+
+3. **Perform Statistical Tests**
    After analysis, use the **Statistics** menu to:
 
    * Compare conditions using **T test** or **ANOVA**.
    * View **p-values** in a comparison matrix.
 
-   ![Mac Interface](path/to/mac_screenshot.png)  
-    *Figure 1: Main interface on macOS.*
+   The user can select which parameter to analyze statistically (e.g., Speed, MSD, Directionality):
 
-    You can select which parameter to analyze statistically (e.g., Speed, MSD, Directionality).
+   ![statparam](images/statistics_parameter_window.png)  
+    *Figure 14: Parameter window for Statistics.*
 
+    After choosing the parameters, the user will be asked to choose the conditions that he wants to analyse:
+
+    ![choose window](images/choose_sample_window.png)  
+    *Figure 15: Window for choosing conditions for the statistics.*
+
+    The result of the **Mann–Whitney U test** is presented as a matrix of pairwise calculated p-values:
+
+    ![ttest window](images/ttest_result_window.png)  
+    *Figure 16: Result matrix for the Mann–Whitney U test.*
+
+    The result of the **ANOVA** is presented in 2 forms:
+
+    1. Calculated p-value is significant, then Tukey HSD tests follows and its results are presented in the table
+
+    ![anova1 window](images/anova_p_significant_result_window.png)  
+    *Figure 17: Result table for significant p-value (Tukey HSD).*
+
+    2. Calculated p-value is not significant, then only p-value is presented:
+
+    ![anova2 window](images/anova_p_non_significant_result_window.png)  
+    *Figure 18: Result table for not significant p-value.*
 ---
 
 ## Supported Input
@@ -215,56 +262,6 @@ Example of the input excel file you can find in `example.xlsx` file.
 
 ---
 
-For additional help contact the support team.
-
-
-
-## Analysis Modules
-
-### 1. **Speed Analysis**
-
-Calculates instantaneous and average speed per track and condition.
-
-**Preview:**
-![Speed Screenshot](path/to/speed_screenshot.png)
-
----
-
-### 2. **Mean Squared Displacement (MSD)**
-
-Analyzes cell motility over time based on MSD calculations.
-
-**Preview:**
-![MSD Screenshot](path/to/msd_screenshot.png)
-
----
-
-### 3. **Directionality Ratio**
-
-Estimates how linear the movement of a cell is.
-
-**Preview:**
-![Directionality Screenshot](path/to/directionality_screenshot.png)
-
----
-
-### 4. **Autocorrelation**
-
-Assesses the memory of motion in cell paths.
-
-**Preview:**
-![Autocorrelation Screenshot](path/to/autocorrelation_screenshot.png)
-
----
-
-### 5. **Trajectory Plots**
-
-Interactive visualization of tracks per condition.
-
-**Preview:**
-![Trajectory Screenshot](path/to/trajectory_screenshot.png)
-
----
 
 ## File Structure
 

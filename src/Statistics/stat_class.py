@@ -64,7 +64,10 @@ class UIStat(QWidget):
                     logger.warning(f"Stats Module : problem with {method} : {e}")
                     QMessageBox.warning(self, "Error", f"{e}")
                 # Show calculated data
-                self.show_data(data)
+                if data is not None:
+                    self.show_data(data)
+                else:
+                    QMessageBox.warning(self, "Error", f"Empty data. Verify that you have chosen more than 1 condition (Conditions with the same name are considered the same conditions.)")
             else:
                 return None
 

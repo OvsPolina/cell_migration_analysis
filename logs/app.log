@@ -187,3 +187,160 @@
 2025-07-24 13:28:22,931 - app - INFO - Stats Module : Parameter chosen Migration Persistence (Autocorrelation)
 2025-07-24 13:28:23,309 - app - ERROR - Stats Module : calculation error index 0 is out of bounds for axis 0 with size 0
 2025-07-24 13:53:47,850 - app - INFO - Closed Application
+2025-07-24 15:08:51,738 - app - INFO - Opened Application
+2025-07-24 15:09:13,493 - app - INFO - Opened Application
+2025-07-24 15:09:41,425 - app - INFO - Opened Application
+2025-07-24 15:13:33,522 - app - INFO - Files to open: ['/Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#3.xlsx']
+2025-07-24 15:13:33,857 - app - INFO - Opened file /Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#3.xlsx
+2025-07-24 15:14:03,143 - app - INFO - Files to open: ['/Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#2.xlsx']
+2025-07-24 15:14:03,391 - app - ERROR - Not correct data in the sheet 'TRIM32': DataFrameSchema 'None' failed series or dataframe validator 0: <Check is_slice_continuous: Doubled Track n. Make sure each track has unique id.>
+2025-07-24 15:14:04,708 - app - INFO - Opened file /Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#2.xlsx
+2025-07-24 15:14:19,865 - app - INFO - Opening configuration dialog for: Autocorrelation
+2025-07-24 15:14:35,470 - app - INFO - Configuration accepted: {'time_interval': 10.0, 'n_time_points': 40, 'n_tracks': 20, 'n_plot_points': 10}
+2025-07-24 15:15:01,769 - app - INFO - Selected samples: [['HME1_Migration_#3.xlsx', 'CTRL'], ['HME1_Migration_#3.xlsx', 'TRIM32'], ['HME1_Migration_#2.xlsx', 'TRIM32'], ['HME1_Migration_#2.xlsx', 'HSPA5'], ['HME1_Migration_#2.xlsx', 'PPP2R5C']]
+2025-07-24 15:15:01,770 - app - INFO - Running analysis: Autocorrelation
+2025-07-24 15:15:02,283 - app - WARNING - Track count mismatch in ['HME1_Migration_#2.xlsx', 'TRIM32']: expected 20, found 18
+2025-07-24 15:15:04,928 - app - INFO - Analysis Autocorrelation completed.
+2025-07-24 15:15:24,991 - app - INFO - Opening configuration dialog for: Trajectories
+2025-07-24 15:15:26,525 - app - INFO - Configuration accepted: {'time_interval': 10.0, 'n_time_points': 40, 'n_tracks': 20, 'n_plot_points': 6}
+2025-07-24 15:15:29,516 - app - INFO - Selected samples: [['HME1_Migration_#3.xlsx', 'CTRL'], ['HME1_Migration_#3.xlsx', 'TRIM32'], ['HME1_Migration_#2.xlsx', 'PPP2R5C']]
+2025-07-24 15:15:29,516 - app - INFO - Running analysis: Trajectories
+2025-07-24 15:15:29,703 - app - INFO - Analysis Trajectories completed.
+2025-07-24 15:15:44,973 - app - INFO - Stats Module : run TTest
+2025-07-24 15:15:53,062 - app - INFO - Stats Module : Samples selected [['HME1_Migration_#3.xlsx', 'CTRL'], ['HME1_Migration_#3.xlsx', 'HSPA5'], ['HME1_Migration_#3.xlsx', 'TRIM32'], ['HME1_Migration_#3.xlsx', 'PPP2R5C'], ['HME1_Migration_#2.xlsx', 'CTRL'], ['HME1_Migration_#2.xlsx', 'HSPA5'], ['HME1_Migration_#2.xlsx', 'TRIM32'], ['HME1_Migration_#2.xlsx', 'PPP2R5C']]
+2025-07-24 15:16:28,744 - app - INFO - Stats Module : Parameter chosen Migration Persistence (Autocorrelation)
+2025-07-24 15:16:28,766 - app - ERROR - Stats Module : calculation error index 0 is out of bounds for axis 0 with size 0
+2025-07-24 15:16:29,251 - app - ERROR - Stats Module : calculation error index 0 is out of bounds for axis 0 with size 0
+2025-07-24 15:16:43,572 - app - INFO - Stats Module : run ANOVA
+2025-07-24 15:16:56,681 - app - INFO - Stats Module : Samples selected [['HME1_Migration_#3.xlsx', 'CTRL'], ['HME1_Migration_#3.xlsx', 'HSPA5'], ['HME1_Migration_#3.xlsx', 'TRIM32'], ['HME1_Migration_#3.xlsx', 'PPP2R5C']]
+2025-07-24 15:16:58,791 - app - INFO - Stats Module : Parameter chosen Migration Persistence (Autocorrelation)
+2025-07-24 15:16:58,801 - app - ERROR - Stats Module : calculation error index 0 is out of bounds for axis 0 with size 0
+2025-07-24 15:16:59,283 - app - INFO - ANOVA : p-value significant, Tukey HSD is performed
+2025-07-24 15:17:15,092 - app - INFO - Stats Module : run ANOVA
+2025-07-24 15:17:20,279 - app - INFO - Stats Module : Samples selected [['HME1_Migration_#3.xlsx', 'TRIM32'], ['HME1_Migration_#3.xlsx', 'PPP2R5C'], ['HME1_Migration_#3.xlsx', 'HSPA5']]
+2025-07-24 15:17:22,797 - app - INFO - Stats Module : Parameter chosen Migration Persistence (Autocorrelation)
+2025-07-24 15:17:23,150 - app - INFO - ANOVA : p-value significant, Tukey HSD is performed
+2025-07-24 15:17:26,371 - app - INFO - Stats Module : run ANOVA
+2025-07-24 15:17:29,342 - app - INFO - Stats Module : Samples selected [['HME1_Migration_#2.xlsx', 'CTRL'], ['HME1_Migration_#2.xlsx', 'HSPA5'], ['HME1_Migration_#2.xlsx', 'TRIM32']]
+2025-07-24 15:17:31,122 - app - INFO - Stats Module : Parameter chosen Migration Persistence (Autocorrelation)
+2025-07-24 15:17:31,135 - app - ERROR - Stats Module : calculation error index 0 is out of bounds for axis 0 with size 0
+2025-07-24 15:17:31,704 - app - INFO - ANOVA : p-value significant, Tukey HSD is performed
+2025-07-24 15:17:35,474 - app - INFO - Stats Module : run ANOVA
+2025-07-24 15:17:39,838 - app - INFO - Stats Module : Samples selected [['HME1_Migration_#3.xlsx', 'CTRL'], ['HME1_Migration_#3.xlsx', 'TRIM32'], ['HME1_Migration_#3.xlsx', 'PPP2R5C']]
+2025-07-24 15:17:41,517 - app - INFO - Stats Module : Parameter chosen Migration Persistence (Autocorrelation)
+2025-07-24 15:17:41,529 - app - ERROR - Stats Module : calculation error index 0 is out of bounds for axis 0 with size 0
+2025-07-24 15:17:41,881 - app - INFO - ANOVA : p-value significant, Tukey HSD is performed
+2025-07-24 15:17:54,492 - app - INFO - Stats Module : run ANOVA
+2025-07-24 15:17:56,717 - app - INFO - Stats Module : Samples selected [['HME1_Migration_#2.xlsx', 'TRIM32'], ['HME1_Migration_#2.xlsx', 'PPP2R5C']]
+2025-07-24 15:17:59,002 - app - INFO - Stats Module : Parameter chosen Migration Persistence (Autocorrelation)
+2025-07-24 15:17:59,220 - app - INFO - ANOVA : p-value significant, Tukey HSD is performed
+2025-07-24 15:18:02,594 - app - INFO - Stats Module : run ANOVA
+2025-07-24 15:18:06,025 - app - INFO - Stats Module : Samples selected [['HME1_Migration_#3.xlsx', 'CTRL'], ['HME1_Migration_#2.xlsx', 'CTRL']]
+2025-07-24 15:18:08,251 - app - INFO - Stats Module : Parameter chosen Migration Persistence (Autocorrelation)
+2025-07-24 15:18:08,260 - app - ERROR - Stats Module : calculation error index 0 is out of bounds for axis 0 with size 0
+2025-07-24 15:18:08,406 - app - ERROR - Stats Module : calculation error index 0 is out of bounds for axis 0 with size 0
+2025-07-24 15:18:08,540 - app - ERROR - Stats Module : ANOVA At least two samples are required; got 1.
+Traceback (most recent call last):
+  File "/Users/polinaovsiannikova/Desktop/projects/migration/src/Statistics/anova.py", line 28, in run_anova
+    stat, p = f_oneway(*grouped)
+              ~~~~~~~~^^^^^^^^^^
+  File "/Users/polinaovsiannikova/Desktop/projects/migration/migration/lib/python3.13/site-packages/scipy/stats/_axis_nan_policy.py", line 573, in axis_nan_policy_wrapper
+    if is_too_small(samples, kwds):
+       ~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Users/polinaovsiannikova/Desktop/projects/migration/migration/lib/python3.13/site-packages/scipy/stats/_stats_py.py", line 3757, in _f_oneway_is_too_small
+    raise TypeError(message)
+TypeError: At least two samples are required; got 1.
+2025-07-24 15:18:08,546 - app - WARNING - Stats Module : problem with ANOVA : cannot access local variable 'p' where it is not associated with a value
+2025-07-24 15:20:07,085 - app - INFO - Opened Application
+2025-07-24 15:20:14,199 - app - INFO - Files to open: ['/Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#1.xlsx', '/Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#2.xlsx', '/Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#3.xlsx']
+2025-07-24 15:20:14,467 - app - ERROR - Not correct data in the sheet 'HSPA5': DataFrameSchema 'None' failed series or dataframe validator 0: <Check is_slice_continuous: Doubled Track n. Make sure each track has unique id.>
+2025-07-24 15:20:15,564 - app - INFO - Opened file /Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#1.xlsx
+2025-07-24 15:20:16,710 - app - ERROR - Not correct data in the sheet 'TRIM32': DataFrameSchema 'None' failed series or dataframe validator 0: <Check is_slice_continuous: Doubled Track n. Make sure each track has unique id.>
+2025-07-24 15:20:17,541 - app - INFO - Opened file /Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#2.xlsx
+2025-07-24 15:20:18,671 - app - INFO - Opened file /Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#3.xlsx
+2025-07-24 15:20:20,618 - app - INFO - Stats Module : run ANOVA
+2025-07-24 15:20:23,759 - app - INFO - Stats Module : Samples selected [['HME1_Migration_#1.xlsx', 'CTRL'], ['HME1_Migration_#2.xlsx', 'CTRL']]
+2025-07-24 15:20:26,163 - app - INFO - Stats Module : Parameter chosen Migration Persistence (Autocorrelation)
+2025-07-24 15:20:26,177 - app - ERROR - Stats Module : calculation error index 0 is out of bounds for axis 0 with size 0
+2025-07-24 15:20:26,310 - app - ERROR - Stats Module : calculation error index 0 is out of bounds for axis 0 with size 0
+2025-07-24 15:20:26,435 - app - ERROR - Stats Module : ANOVA At least two samples are required; got 1.
+Traceback (most recent call last):
+  File "/Users/polinaovsiannikova/Desktop/projects/migration/src/Statistics/anova.py", line 28, in run_anova
+    stat, p = f_oneway(*grouped)
+              ~~~~~~~~^^^^^^^^^^
+  File "/Users/polinaovsiannikova/Desktop/projects/migration/migration/lib/python3.13/site-packages/scipy/stats/_axis_nan_policy.py", line 573, in axis_nan_policy_wrapper
+    if is_too_small(samples, kwds):
+       ~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Users/polinaovsiannikova/Desktop/projects/migration/migration/lib/python3.13/site-packages/scipy/stats/_stats_py.py", line 3757, in _f_oneway_is_too_small
+    raise TypeError(message)
+TypeError: At least two samples are required; got 1.
+2025-07-24 15:22:26,724 - app - INFO - Opened Application
+2025-07-24 15:22:55,139 - app - INFO - Files to open: ['/Users/polinaovsiannikova/Desktop/projects/migration/example.xlsx', '/Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#1.xlsx', '/Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#2.xlsx', '/Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#3.xlsx']
+2025-07-24 15:22:55,456 - app - INFO - Opened file /Users/polinaovsiannikova/Desktop/projects/migration/example.xlsx
+2025-07-24 15:22:56,529 - app - ERROR - Not correct data in the sheet 'HSPA5': DataFrameSchema 'None' failed series or dataframe validator 0: <Check is_slice_continuous: Doubled Track n. Make sure each track has unique id.>
+2025-07-24 15:22:57,811 - app - INFO - Opened file /Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#1.xlsx
+2025-07-24 15:22:58,942 - app - ERROR - Not correct data in the sheet 'TRIM32': DataFrameSchema 'None' failed series or dataframe validator 0: <Check is_slice_continuous: Doubled Track n. Make sure each track has unique id.>
+2025-07-24 15:22:59,891 - app - INFO - Opened file /Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#2.xlsx
+2025-07-24 15:23:01,024 - app - INFO - Opened file /Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#3.xlsx
+2025-07-24 15:23:05,802 - app - INFO - Stats Module : run ANOVA
+2025-07-24 15:23:09,053 - app - INFO - Stats Module : Samples selected [['example.xlsx', 'CTRL'], ['HME1_Migration_#1.xlsx', 'CTRL']]
+2025-07-24 15:23:10,943 - app - INFO - Stats Module : Parameter chosen Migration Persistence (Autocorrelation)
+2025-07-24 15:23:10,959 - app - ERROR - Stats Module : calculation error index 0 is out of bounds for axis 0 with size 0
+2025-07-24 15:23:11,092 - app - ERROR - Stats Module : calculation error index 0 is out of bounds for axis 0 with size 0
+2025-07-24 15:23:11,219 - app - ERROR - Stats Module : ANOVA At least two samples are required; got 1.
+Traceback (most recent call last):
+  File "/Users/polinaovsiannikova/Desktop/projects/migration/src/Statistics/anova.py", line 28, in run_anova
+    stat, p = f_oneway(*grouped)
+              ~~~~~~~~^^^^^^^^^^
+  File "/Users/polinaovsiannikova/Desktop/projects/migration/migration/lib/python3.13/site-packages/scipy/stats/_axis_nan_policy.py", line 573, in axis_nan_policy_wrapper
+    if is_too_small(samples, kwds):
+       ~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Users/polinaovsiannikova/Desktop/projects/migration/migration/lib/python3.13/site-packages/scipy/stats/_stats_py.py", line 3757, in _f_oneway_is_too_small
+    raise TypeError(message)
+TypeError: At least two samples are required; got 1.
+2025-07-24 15:25:04,515 - app - INFO - Closed Application
+2025-07-24 15:25:10,175 - app - INFO - Opened Application
+2025-07-24 15:25:18,462 - app - INFO - Files to open: ['/Users/polinaovsiannikova/Desktop/projects/migration/example.xlsx', '/Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#1.xlsx', '/Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#2.xlsx']
+2025-07-24 15:25:18,801 - app - INFO - Opened file /Users/polinaovsiannikova/Desktop/projects/migration/example.xlsx
+2025-07-24 15:25:19,905 - app - ERROR - Not correct data in the sheet 'HSPA5': DataFrameSchema 'None' failed series or dataframe validator 0: <Check is_slice_continuous: Doubled Track n. Make sure each track has unique id.>
+2025-07-24 15:25:20,947 - app - INFO - Opened file /Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#1.xlsx
+2025-07-24 15:25:22,111 - app - ERROR - Not correct data in the sheet 'TRIM32': DataFrameSchema 'None' failed series or dataframe validator 0: <Check is_slice_continuous: Doubled Track n. Make sure each track has unique id.>
+2025-07-24 15:25:23,076 - app - INFO - Opened file /Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#2.xlsx
+2025-07-24 15:25:27,152 - app - INFO - Stats Module : run ANOVA
+2025-07-24 15:25:29,885 - app - INFO - Stats Module : Samples selected [['example.xlsx', 'CTRL'], ['HME1_Migration_#1.xlsx', 'CTRL']]
+2025-07-24 15:25:31,961 - app - INFO - Stats Module : Parameter chosen Migration Persistence (Autocorrelation)
+2025-07-24 15:25:31,973 - app - ERROR - Stats Module : calculation error index 0 is out of bounds for axis 0 with size 0
+2025-07-24 15:25:32,116 - app - ERROR - Stats Module : calculation error index 0 is out of bounds for axis 0 with size 0
+2025-07-24 15:25:32,250 - app - ERROR - Stats Module : ANOVA At least two samples are required; got 1.
+Traceback (most recent call last):
+  File "/Users/polinaovsiannikova/Desktop/projects/migration/src/Statistics/anova.py", line 28, in run_anova
+    stat, p = f_oneway(*grouped)
+              ~~~~~~~~^^^^^^^^^^
+  File "/Users/polinaovsiannikova/Desktop/projects/migration/migration/lib/python3.13/site-packages/scipy/stats/_axis_nan_policy.py", line 573, in axis_nan_policy_wrapper
+    if is_too_small(samples, kwds):
+       ~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Users/polinaovsiannikova/Desktop/projects/migration/migration/lib/python3.13/site-packages/scipy/stats/_stats_py.py", line 3757, in _f_oneway_is_too_small
+    raise TypeError(message)
+TypeError: At least two samples are required; got 1.
+2025-07-24 15:25:50,311 - app - INFO - Stats Module : run ANOVA
+2025-07-24 15:25:59,721 - app - INFO - Stats Module : Samples selected [['HME1_Migration_#2.xlsx', 'TRIM32'], ['HME1_Migration_#1.xlsx', 'TRIM32'], ['example.xlsx', 'PPP2R5C']]
+2025-07-24 15:26:01,812 - app - INFO - Stats Module : Parameter chosen Migration Persistence (Autocorrelation)
+2025-07-24 15:26:01,832 - app - ERROR - Stats Module : calculation error index 0 is out of bounds for axis 0 with size 0
+2025-07-24 15:26:01,974 - app - ERROR - Stats Module : calculation error index 0 is out of bounds for axis 0 with size 0
+2025-07-24 15:26:02,107 - app - ERROR - Stats Module : calculation error index 0 is out of bounds for axis 0 with size 0
+2025-07-24 15:26:02,254 - app - INFO - ANOVA : p-value significant, Tukey HSD is performed
+2025-07-24 15:26:49,781 - app - INFO - Opened Application
+2025-07-24 15:27:20,036 - app - INFO - Files to open: ['/Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#1.xlsx', '/Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#2.xlsx', '/Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#3.xlsx']
+2025-07-24 15:27:20,300 - app - ERROR - Not correct data in the sheet 'HSPA5': DataFrameSchema 'None' failed series or dataframe validator 0: <Check is_slice_continuous: Doubled Track n. Make sure each track has unique id.>
+2025-07-24 15:27:22,065 - app - INFO - Opened file /Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#1.xlsx
+2025-07-24 15:27:23,202 - app - ERROR - Not correct data in the sheet 'TRIM32': DataFrameSchema 'None' failed series or dataframe validator 0: <Check is_slice_continuous: Doubled Track n. Make sure each track has unique id.>
+2025-07-24 15:27:24,524 - app - INFO - Opened file /Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#2.xlsx
+2025-07-24 15:27:25,652 - app - INFO - Opened file /Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#3.xlsx
+2025-07-24 15:27:27,552 - app - INFO - Stats Module : run ANOVA
+2025-07-24 15:27:31,605 - app - INFO - Stats Module : Samples selected [['HME1_Migration_#1.xlsx', 'TRIM32'], ['HME1_Migration_#2.xlsx', 'TRIM32'], ['HME1_Migration_#3.xlsx', 'PPP2R5C']]
+2025-07-24 15:27:33,749 - app - INFO - Stats Module : Parameter chosen Migration Persistence (Autocorrelation)
+2025-07-24 15:27:33,768 - app - ERROR - Stats Module : calculation error index 0 is out of bounds for axis 0 with size 0
+2025-07-24 15:27:33,920 - app - ERROR - Stats Module : calculation error index 0 is out of bounds for axis 0 with size 0
+2025-07-24 15:27:34,072 - app - ERROR - Stats Module : calculation error index 0 is out of bounds for axis 0 with size 0
+2025-07-24 15:27:34,203 - app - INFO - ANOVA : p-value is not significant
+2025-07-24 16:21:32,624 - app - INFO - Closed Application

@@ -28,6 +28,7 @@ def run_anova(cell_data, parameter):
         stat, p = f_oneway(*grouped)
     except Exception as e:
         logger.exception(f"Stats Module : ANOVA {e}")
+        return None
 
     if p < 0.05:
         # If ANOVA is significant, perform Tukey's post-hoc test
