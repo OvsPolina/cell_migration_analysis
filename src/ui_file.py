@@ -47,6 +47,9 @@ class UIFile(QWidget):
             file_paths, _ = QFileDialog.getOpenFileNames(self, "Open Excel File", "", "Excel files (*.xlsx *.xls *.xlsm)")
         except Exception as e:
             logger.exception(f"Could not receive file paths to open: {e}")
+
+        if not file_paths:
+            return
         
         # Display tree widget and adjust layout
         self.ui.treeWidget.show()

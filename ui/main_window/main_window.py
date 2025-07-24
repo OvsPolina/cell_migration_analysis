@@ -109,8 +109,6 @@ class Ui_MainWindow(object):
         self.actionMSD.setObjectName("actionMSD")
         self.actionDirectionality_Ratio = QtGui.QAction(parent=MainWindow)
         self.actionDirectionality_Ratio.setObjectName("actionDirectionality_Ratio")
-        self.actionp_value = QtGui.QAction(parent=MainWindow)
-        self.actionp_value.setObjectName("actionp_value")
         
         self.actionTrajectories = QtGui.QAction(parent=MainWindow)
         self.actionTrajectories.setObjectName("actionTrajectories")

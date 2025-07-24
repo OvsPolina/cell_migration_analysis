@@ -85,6 +85,17 @@ class DataModel(QAbstractTableModel):
             self.dataChanged.emit(index, index)
             return True
         return False
+    
+    def flags(self, index):
+        return Qt.ItemFlag.ItemIsEnabled | Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEditable
+
+    def headerData(self, section, orientation, role=Qt.ItemDataRole.DisplayRole):
+        if role == Qt.ItemDataRole.DisplayRole:
+            if orientation == Qt.Orientation.Horizontal:
+                return str(self._df.columns[section])
+            elif orientation == Qt.Orientation.Vertical:
+                return str(self._df.index[section])
+        return None
 
     def get_dataframe(self):
         """

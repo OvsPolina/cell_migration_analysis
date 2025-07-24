@@ -7,7 +7,7 @@ A PyQt-based desktop application for analyzing cell trajectories using various q
 * **Directionality Ratio**
 * **Autocorrelation**
 
-This tool helps researchers and analysts efficiently process and visualize tracked cell movement data.
+This tool helps researchers and analysts efficiently process and visualize tracked cell 2D movement data.
 
 Based on the study:  
 **Quantitative and unbiased analysis of directional persistence in cell migration**  
@@ -20,7 +20,7 @@ _Roman Gorelik & Alexis Gautreau_
 * Load data from Excel files.
 * Support for multiple sheets (condition per sheet).
 * Trajectory plotting.
-* Exportable plots (PNG, PDF).
+* Exportable plots (PNG).
 * Migration Analyses include:
 
   * **Speed** with average and SEM.
@@ -65,7 +65,7 @@ python main.py
 
 ---
 
-## 2. Running the Standalone Executable (.exe) — Windows
+## 2. Running the Standalone Executable (.exe) — Windows (Coming soon)
 
 A ready-to-use `cell_migration_analysis.exe` file that does **not require Python or any dependencies installed** on your system.
 
@@ -101,52 +101,121 @@ Below you will find descriptions of the main interface elements along with scree
 
 The main window contains several important buttons and panels that help you load data, run analyses, and visualize results.
 
-### Interface on macOS
+### Interface
 
 ![Mac Interface](path/to/mac_screenshot.png)  
 *Figure 1: Main interface on macOS.*
 
-- **Open File** (top-left) — Click this button to open a file dialog and load sample data files into the application.  
-- **Analysis Type Dropdown** (next to Load Data) — Select the type of analysis you want to perform, such as Autocorrelation or MSD.  
-- **Run Analysis** (right of dropdown) — Executes the selected analysis on the loaded data.  
-- **Save Results** (bottom-right) — Saves the processed data and generated plots to your chosen location.  
-- **Data Table** (center) — Displays the loaded dataset and updated results after analysis.  
-
----
-
-### Interface on Windows
-
 ![Windows Interface](path/to/windows_screenshot.png)  
 *Figure 2: Main interface on Windows.*
 
-- **Load Data** button is located at the top toolbar. Clicking it allows you to import data files.  
-- **Analysis Selector** dropdown is to the right of Load Data and lets you choose the analysis method.  
-- **Run Analysis** button initiates the selected analysis process.  
-- **Save Results** button is near the bottom of the window to export data and figures.  
-- The **Data Table** updates dynamically with loaded data and analysis output.  
+
+### File Menu
+
+* **New File**: Create a new blank project.
+* **Open File**: Load a file into the application.
+* **Save**: Save current work.
+* **Save as**: Save under a new filename.
+
+
+### Edit Menu
+
+* **Undo / Redo**: Standard undo/redo actions.
+* **Cut / Copy / Paste**: Modify data.
+* **Delete**: Remove selected item.
+* **Select All**: Select all items in current view.
+
+
+### Analyse Menu
+
+* **Autocorrelation**: Compute the persistence of direction over time.
+* **Speed**: Calculate the average speed of tracked cells.
+* **MSD** (Mean Squared Displacement): Measure average distance moved over time intervals.
+* **Directionality Ratio**: Measure directedness of motion.
+
+Each analyse presents a plot at the end that can be saved as PNG file.
+
+
+### Statistics Menu
+
+* **T test**: Perform a two-sample pairwise T-test across conditions.
+* **ANOVA**: Perform analysis of variance across multiple conditions. If the p-value is significant, will present Pairwise Tukey HSD test results. Otherwise will show p-value.
+
+
+### Plot Menu
+
+* **Trajectories**: Visualize cell movement tracks over time centered at (0,0).
 
 ---
 
-## How to Use the Application
+## Workflow
 
-1. **Load Your Data**  
-   Click the **Load Data** button and select one or more data files. The data will be displayed in the table view.
+1. **Open a File**
+   Use `File > Open File` or the toolbar icon to import tracking data.
 
-2. **Choose Analysis Type**  
-   Use the **Analysis Type** dropdown to select your desired analysis method.
+   ![Mac Interface](path/to/mac_screenshot.png)  
+    *Figure 1: Main interface on macOS.*
 
-3. **Configure Parameters**  
-   Input parameters such as *time interval* and *number of plot points* in the settings panel (usually located on the right side or in a separate tab).
+    File and condition names appear in the table and tree widgets.
 
-4. **Run the Analysis**  
-   Click **Run Analysis** to process the data. Results will appear in the table and plots will open in a separate dialog.
+2. **Select a Condition/Track**
+   Navigate the tree view to choose a file and condition. Data will be shown in the central panel - table.
 
-5. **View and Save Results**  
-   Inspect the plot dialogs for graphical summaries. Use the **Save Results** button to export both data and plots.
+   ![Mac Interface](path/to/mac_screenshot.png)  
+    *Figure 1: Main interface on macOS.*
+
+    ![Mac Interface](path/to/mac_screenshot.png)  
+    *Figure 1: Main interface on macOS.*
+
+3. **Run Analyses**
+   Use the **Analyse** menu or toolbar to compute movement metrics like:
+
+   * Speed
+   * MSD
+   * Autocorrelation
+   * Directionality Ratio
+
+   ![Mac Interface](path/to/mac_screenshot.png)  
+    *Figure 1: Main interface on macOS.*
+
+    ![Mac Interface](path/to/mac_screenshot.png)  
+    *Figure 1: Main interface on macOS.*
+
+    ![Mac Interface](path/to/mac_screenshot.png)  
+    *Figure 1: Main interface on macOS.*
+
+4. **Visualize Tracks**
+   Select **Plot > Trajectories** to see the paths of migrating cells.
+
+   ![Mac Interface](path/to/mac_screenshot.png)  
+    *Figure 1: Main interface on macOS.*
+
+5. **Perform Statistical Tests**
+   After analysis, use the **Statistics** menu to:
+
+   * Compare conditions using **T test** or **ANOVA**.
+   * View **p-values** in a comparison matrix.
+
+   ![Mac Interface](path/to/mac_screenshot.png)  
+    *Figure 1: Main interface on macOS.*
+
+    You can select which parameter to analyze statistically (e.g., Speed, MSD, Directionality).
 
 ---
 
-For additional help, refer to the FAQ section or contact the support team.
+## Supported Input
+
+The app expects tabular data with columns like:
+
+* `Track n` (track ID)
+* `Slice n` (frame number)
+* `X`, `Y` (coordinates)
+
+Example of the input excel file you can find in `example.xlsx` file.
+
+---
+
+For additional help contact the support team.
 
 
 
@@ -200,17 +269,48 @@ Interactive visualization of tracks per condition.
 ## File Structure
 
 ```
-project/
+cell_migration_analysis/
+├── logs/
+│   └── app.log
+├── src/
+│   ├── Analysis/
+│       ├── analysis_class.py
+│       ├── autocorrelation.py
+│       ├── dir_ratio.py
+│       ├── msd.py
+│       └── speed.py
+│   ├── Plot/
+│       ├── plot.py
+│       └── trajectories.py
+│   ├── Statistics/
+│       ├── anova.py
+│       ├── stat_class.py
+│       └── ttest.py
+│   ├── utils/
+│       └── input_data.py
+│   ├── ui_edit.py
+│   ├── ui_file.py
+│   └── data_model.py
 ├── ui/
-│   └── plot/
-│       └── plot_window.py
-├── analysis/
-│   ├── speed.py
-│   ├── msd.py
-│   ├── dir_ratio.py
-│   ├── autocorrelation.py
-│   └── trajectories.py
+│   └── configuration/
+│       ├── choose_sample_window.py
+│       ├── choose_sample_window.ui
+│       ├── configuration_autocorrelation_window.ui
+│       └── configuration_autocorrelation_window.py
+│   ├── main_window/
+│       ├── main_window.py
+│       └── main_window.ui
+│   ├── plot/
+│       ├── plot_window.py
+│       └── plot.ui
+│   └── stats/
+│       ├── parameters_window.py
+│       ├── parameters_window.ui
+│       └── result_window.py
+├── __init__.py
+├── example.xlsx
 ├── main.py
+├── logger.py
 ├── README.md
 └── requirements.txt
 ```
@@ -234,19 +334,9 @@ project/
 
 ---
 
-## License
-
----
-
-## Contributing
-
-Feel free to open issues or submit pull requests for improvements or new features.
-
----
-
 ## Contact
 
-For questions or support, contact [your.email@example.com](mailto:your.email@example.com)
+For questions or support, contact [polina.ovsiannikova0403@gmail.com](mailto:polina.ovsiannikova0403@gmail.com)
 
 ---
 

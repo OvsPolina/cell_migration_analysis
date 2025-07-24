@@ -156,3 +156,34 @@
 2025-07-23 14:13:48,229 - app - INFO - Files to open: ['/Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#3.xlsx']
 2025-07-23 14:13:48,451 - app - INFO - Opened file /Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#3.xlsx
 2025-07-23 14:13:55,016 - app - INFO - Closed Application
+2025-07-24 13:06:05,220 - app - INFO - Opened Application
+2025-07-24 13:06:12,343 - app - INFO - Files to open: ['/Users/polinaovsiannikova/Desktop/projects/migration/example.xlsx']
+2025-07-24 13:06:12,668 - app - INFO - Opened file /Users/polinaovsiannikova/Desktop/projects/migration/example.xlsx
+2025-07-24 13:06:34,943 - app - INFO - Files to open: ['/Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#1.xlsx']
+2025-07-24 13:06:35,112 - app - ERROR - Not correct data in the sheet 'HSPA5': DataFrameSchema 'None' failed series or dataframe validator 0: <Check is_slice_continuous: Doubled Track n. Make sure each track has unique id.>
+2025-07-24 13:06:36,562 - app - INFO - Opened file /Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#1.xlsx
+2025-07-24 13:06:41,701 - app - INFO - Opening configuration dialog for: Autocorrelation
+2025-07-24 13:06:43,125 - app - INFO - Configuration accepted: {'time_interval': 10.0, 'n_time_points': 40, 'n_tracks': 20, 'n_plot_points': 6}
+2025-07-24 13:06:47,940 - app - INFO - Selected samples: [['example.xlsx', 'CTRL'], ['example.xlsx', 'HSPA5'], ['example.xlsx', 'TRIM32'], ['HME1_Migration_#1.xlsx', 'PPP2R5C']]
+2025-07-24 13:06:47,941 - app - INFO - Running analysis: Autocorrelation
+2025-07-24 13:06:48,661 - app - INFO - Analysis Autocorrelation completed.
+2025-07-24 13:12:47,901 - app - INFO - New temporary file was created: /Users/polinaovsiannikova/Desktop/projects/migration/tmp/new_file_1.xlsx
+2025-07-24 13:12:48,693 - app - INFO - New file new_file_1.xlsx was created and added to the widgets.
+2025-07-24 13:12:54,176 - app - INFO - Files to open: []
+2025-07-24 13:15:47,417 - app - INFO - Opened Application
+2025-07-24 13:15:52,596 - app - INFO - Files to open: []
+2025-07-24 13:15:56,048 - app - INFO - Files to open: ['/Users/polinaovsiannikova/Desktop/projects/migration/example.xlsx']
+2025-07-24 13:15:56,458 - app - INFO - Opened file /Users/polinaovsiannikova/Desktop/projects/migration/example.xlsx
+2025-07-24 13:16:02,026 - app - INFO - Files to open: []
+2025-07-24 13:18:51,524 - app - INFO - Opened Application
+2025-07-24 13:18:55,732 - app - INFO - Files to open: ['/Users/polinaovsiannikova/Desktop/projects/migration/example.xlsx']
+2025-07-24 13:18:56,173 - app - INFO - Opened file /Users/polinaovsiannikova/Desktop/projects/migration/example.xlsx
+2025-07-24 13:19:28,710 - app - INFO - Closed Application
+2025-07-24 13:28:06,830 - app - INFO - Opened Application
+2025-07-24 13:28:10,831 - app - INFO - Files to open: ['/Users/polinaovsiannikova/Desktop/projects/migration/example.xlsx']
+2025-07-24 13:28:11,250 - app - INFO - Opened file /Users/polinaovsiannikova/Desktop/projects/migration/example.xlsx
+2025-07-24 13:28:18,146 - app - INFO - Stats Module : run TTest
+2025-07-24 13:28:21,075 - app - INFO - Stats Module : Samples selected [['example.xlsx', 'CTRL'], ['example.xlsx', 'HSPA5'], ['example.xlsx', 'TRIM32'], ['example.xlsx', 'PPP2R5C']]
+2025-07-24 13:28:22,931 - app - INFO - Stats Module : Parameter chosen Migration Persistence (Autocorrelation)
+2025-07-24 13:28:23,309 - app - ERROR - Stats Module : calculation error index 0 is out of bounds for axis 0 with size 0
+2025-07-24 13:53:47,850 - app - INFO - Closed Application
