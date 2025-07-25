@@ -4,6 +4,7 @@ import os
 from PyQt6.QtWidgets import (
     QWidget, QDialog, QMessageBox, QTreeWidgetItem, QTabWidget
 )
+from PyQt6.QtCore import Qt
 
 from logger import app_logger as logger
 
@@ -280,6 +281,12 @@ class UIAnalysis(QWidget):
             #Update table in tab:
             new_model = DataModel(data)
             table.setModel(new_model)
+
+            # Reset unsaved change flags in the tree
+            tree_item = getattr(table, "tree_item", None)
+            data = tree_item.data(0, Qt.ItemDataRole.UserRole) or {}
+            data["unsaved_changes"] = True
+            tree_item.setData(0, Qt.ItemDataRole.UserRole, data)
             
         # create plot Dialog
         dialog = PlotDialog(filename, analysis, title=f"{analysis} Plot")
@@ -301,4 +308,6 @@ class UIAnalysis(QWidget):
             self.plot_dialogs.append(dialog)
 
         logger.info(f"Analysis {analysis} completed.")
+
+        
         
