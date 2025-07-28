@@ -4,7 +4,7 @@ from matplotlib.figure import Figure
 
 from ui.plot.plot_window import Ui_Plot
 
-from logger import app_logger as logger
+from logs.logger import app_logger as logger
 
 import os
 

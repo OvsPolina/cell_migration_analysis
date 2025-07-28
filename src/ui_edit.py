@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtGui import QUndoStack
 
-from logger import app_logger as logger
+from logs.logger import app_logger as logger
 
 class UIEdit(QWidget):
     """

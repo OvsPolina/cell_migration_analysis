@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 
-from logger import app_logger as logger
+from logs.logger import app_logger as logger
 
 from ui.configuration.configuration_autocorrelation_window import Ui_ConfigurationAutocorrelationWindow
 from ui.configuration.choose_sample_window import Ui_ChooseSampleWindow

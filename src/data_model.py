@@ -1,7 +1,7 @@
 from PyQt6.QtCore import Qt, QAbstractTableModel
 from PyQt6.QtGui import QUndoStack, QUndoCommand
 
-from logger import app_logger as logger
+from logs.logger import app_logger as logger
 
 
 class DataModel(QAbstractTableModel):

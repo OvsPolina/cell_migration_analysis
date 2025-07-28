@@ -3,7 +3,7 @@ from PyQt6.QtGui import QShortcut, QKeySequence
 from PyQt6.QtCore import Qt
 import os
 
-from logger import app_logger as logger
+from logs.logger import app_logger as logger
 
 # Interface import
 from ui.main_window.main_window import Ui_MainWindow 
@@ -15,6 +15,25 @@ from src.ui_edit import UIEdit
 # Import calculating module
 from src.Analysis.analysis_class import UIAnalysis
 from src.Statistics.stat_class import UIStat
+
+
+import sys
+import os
+
+# Add path to the current directory (with main.py)
+if getattr(sys, 'frozen', False):
+    # App runs as compiled `.app`
+    base_path = sys._MEIPASS
+else:
+    # Runs with the console
+    base_path = os.path.dirname(os.path.abspath(__file__))
+
+# Add base_path to sys.path, to find all files
+sys.path.insert(0, base_path)
+sys.path.insert(0, os.path.join(base_path, "src"))
+sys.path.insert(0, os.path.join(base_path, "ui"))
+sys.path.insert(0, os.path.join(base_path, "logs"))
+
 
 class CellMigration(QMainWindow):
     def __init__(self):
@@ -77,6 +96,20 @@ class CellMigration(QMainWindow):
                             logger.info(f"Saved file {item.text(0)}.")
                             event.accept() 
                         else:
+                            # Reset unsaved change flags in the tree
+                            tree_item = item.parent()
+                            if tree_item is not None:
+                                # Change flag for root
+                                data = tree_item.data(0, Qt.ItemDataRole.UserRole) or {}
+                                data["unsaved_changes"] = False
+                                tree_item.setData(0, Qt.ItemDataRole.UserRole, data)
+
+                                # Change flag for children of the root
+                                for i in range(tree_item.childCount()):
+                                    child = tree_item.child(i)
+                                    data = child.data(0, Qt.ItemDataRole.UserRole) or {}
+                                    data["unsaved_changes"] = False
+                                    child.setData(0, Qt.ItemDataRole.UserRole, data)
                             event.ignore()
 
 

@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from scipy.stats import ttest_ind, mannwhitneyu
 
-from logger import app_logger as logger
+from logs.logger import app_logger as logger
 
 def run_ttest(cell_data, parameter):
     """

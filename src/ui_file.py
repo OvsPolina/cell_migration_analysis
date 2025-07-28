@@ -10,7 +10,7 @@ from PyQt6.QtWidgets import (
 import pandas as pd
 import pandera.pandas as pa
 
-from logger import app_logger as logger
+from logs.logger import app_logger as logger
 
 from src.data_model import DataModel
 from src.utils.input_data import input_schema

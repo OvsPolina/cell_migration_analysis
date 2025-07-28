@@ -260,6 +260,10 @@ The app expects tabular data with columns like:
 
 Example of the input excel file you can find in `example.xlsx` file.
 
+## Errors
+
+In case of errors, the work of the application can be tracked in the `logs/app.log` file 
+
 ---
 
 

@@ -1,5 +1,5 @@
 import numpy as np
-from logger import app_logger as logger
+from logs.logger import app_logger as logger
 
 class Speed():
     """

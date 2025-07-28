@@ -6,3 +6,6 @@ migration/
 
 temp/
 tmp/
+
+dist/
+build/

@@ -6,7 +6,7 @@ from src.data_model import DataModel
 from src.Statistics.ttest import run_ttest
 from src.Statistics.anova import run_anova
 
-from logger import app_logger as logger
+from logs.logger import app_logger as logger
 
 import pandas as pd
 import numpy as np

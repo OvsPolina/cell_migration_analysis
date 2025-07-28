@@ -507,3 +507,25 @@ TypeError: At least two samples are required; got 1.
 2025-07-25 14:55:49,176 - app - ERROR - Not correct data in the sheet 'TRIM32': DataFrameSchema 'None' failed series or dataframe validator 0: <Check is_slice_continuous: Doubled Track n. Make sure each track has unique id.>
 2025-07-25 14:55:50,760 - app - INFO - Opened file /Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#2.xlsx
 2025-07-25 14:55:54,008 - app - INFO - Closed Application
+2025-07-25 15:14:31,625 - app - INFO - Opened Application
+2025-07-25 15:14:40,484 - app - INFO - Files to open: ['/Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#1.xlsx', '/Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#2.xlsx']
+2025-07-25 15:14:40,847 - app - INFO - Opened file /Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#1.xlsx
+2025-07-25 15:14:43,005 - app - ERROR - Not correct data in the sheet 'TRIM32': DataFrameSchema 'None' failed series or dataframe validator 0: <Check is_slice_continuous: Doubled Track n. Make sure each track has unique id.>
+2025-07-25 15:14:44,356 - app - INFO - Opened file /Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#2.xlsx
+2025-07-25 15:14:47,465 - app - INFO - Opening configuration dialog for: MSD
+2025-07-25 15:14:48,696 - app - INFO - Configuration accepted: {'time_interval': 10.0, 'n_time_points': 40, 'n_tracks': 20, 'n_plot_points': 6}
+2025-07-25 15:14:52,841 - app - INFO - Selected samples: [['HME1_Migration_#1.xlsx', 'CTRL'], ['HME1_Migration_#1.xlsx', 'TRIM32'], ['HME1_Migration_#2.xlsx', 'HSPA5'], ['HME1_Migration_#2.xlsx', 'PPP2R5C']]
+2025-07-25 15:14:52,842 - app - INFO - Running analysis: MSD
+2025-07-25 15:14:53,099 - app - INFO - Analysis MSD completed.
+2025-07-25 15:15:06,577 - app - INFO - Closed Application
+2025-07-25 15:16:53,783 - app - INFO - Opened Application
+2025-07-25 15:17:00,679 - app - INFO - Files to open: ['/Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#1.xlsx', '/Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#2.xlsx']
+2025-07-25 15:17:01,043 - app - INFO - Opened file /Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#1.xlsx
+2025-07-25 15:17:03,164 - app - ERROR - Not correct data in the sheet 'TRIM32': DataFrameSchema 'None' failed series or dataframe validator 0: <Check is_slice_continuous: Doubled Track n. Make sure each track has unique id.>
+2025-07-25 15:17:04,354 - app - INFO - Opened file /Users/polinaovsiannikova/Desktop/projects/migration/HME1_Migration_#2.xlsx
+2025-07-25 15:17:08,548 - app - INFO - Opening configuration dialog for: Autocorrelation
+2025-07-25 15:17:09,720 - app - INFO - Configuration accepted: {'time_interval': 10.0, 'n_time_points': 40, 'n_tracks': 20, 'n_plot_points': 6}
+2025-07-25 15:17:13,053 - app - INFO - Selected samples: [['HME1_Migration_#1.xlsx', 'CTRL'], ['HME1_Migration_#1.xlsx', 'TRIM32'], ['HME1_Migration_#2.xlsx', 'HSPA5'], ['HME1_Migration_#2.xlsx', 'PPP2R5C']]
+2025-07-25 15:17:13,053 - app - INFO - Running analysis: Autocorrelation
+2025-07-25 15:17:13,783 - app - INFO - Analysis Autocorrelation completed.
+2025-07-25 15:17:22,009 - app - INFO - Closed Application

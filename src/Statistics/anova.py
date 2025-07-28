@@ -5,7 +5,7 @@ from statsmodels.stats.multicomp import pairwise_tukeyhsd
 
 
 
-from logger import app_logger as logger
+from logs.logger import app_logger as logger
 
 def run_anova(cell_data, parameter):
     """

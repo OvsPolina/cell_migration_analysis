@@ -1,6 +1,6 @@
 import numpy as np
 import re
-from logger import app_logger as logger
+from logs.logger import app_logger as logger
 
 class Autocorrelation():
     """
