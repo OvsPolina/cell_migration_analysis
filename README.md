@@ -18,7 +18,7 @@ _Roman Gorelik & Alexis Gautreau_
 ## Features
 
 * Load data from Excel files.
-* Support for multiple sheets (condition per sheet).
+* Support for multiple sheets (condition per sheet with unique track identificators).
 * Trajectory plotting.
 * Exportable plots (PNG).
 * Migration Analyses include:
@@ -27,6 +27,7 @@ _Roman Gorelik & Alexis Gautreau_
   * **MSD** by cell and condition.
   * **Directionality Ratio**.
   * **Autocorrelation**.
+
 * Statistical Tests:
     * **Mann–Whitney U test** (non-parametric version of the t-test)
     * **ANOVA**
@@ -49,8 +50,8 @@ If you want to run the app directly from source code, follow these steps:
 ### Installing dependencies
 
 ```bash
-git clone https://github.com/OvsPolina/cell_migration_analysis.git
-cd cell_migration_analysis
+git clone https://github.com/OvsPolina/cell_migration_analysis.git # or download project as a .zip (Code -> Download .zip)
+cd cell_migration_analysis         # or where you unpacked .zip / cloned git repository
 python -m venv venv                # create a virtual environment (recommended)
 source venv/bin/activate           # macOS/Linux
 venv\Scripts\activate.bat          # Windows
@@ -65,29 +66,29 @@ python main.py
 
 ---
 
-## 2. Running the Standalone Executable (.exe) — Windows (Coming soon)
+## 2. Running the Standalone Executable 
 
-A ready-to-use `cell_migration_analysis.exe` file that does **not require Python or any dependencies installed** on your system.
+A ready-to-use file that does **not require Python or any dependencies installed** on your system.
 
 ### How to use
 
-1. Download `cell_migration_analysis.exe` from the [Releases](https://github.com/OvsPolina/cell_migration_analysis) section
-2. Run it by double-clicking the file
+**Windows** : `CellMigrationApp.zip` (.exe in included in the archive)
+
+1. Download `CellMigrationApp.zip` from the [Releases](https://github.com/OvsPolina/cell_migration_analysis/releases) section
+2. Extract the files from the archives where you would like the programm to be.
+3. Double click on the CellMigrationApp.exe
+4. The app will open as a normal desktop program
+
+> **Note:** The application will create a directory logs where app.log file will be shown. So it is better to have .exe in the folder.
+
+**MacOS** : `CellMigrationApp`
+
+1. Download `CellMigrationApp` from the [Releases](https://github.com/OvsPolina/cell_migration_analysis/releases) section
+2. Double click on the CellMigrationApp
 3. The app will open as a normal desktop program
 
-> **Note:** The executable file size may be around 50-100 MB due to the embedded Python interpreter and libraries.
+> **Note:** Migth take up to one minute to open.
 
----
-
-## 3. Installer Setup (Coming Soon)
-
-In upcoming releases, an **installer for Windows** will be provided which will allow you to:
-
-* Install the program into `Program Files`
-* Create shortcuts on Desktop and Start Menu
-* Easily uninstall via Control Panel ("Programs and Features")
-
-> Stay tuned for updates in the [Releases](https://github.com/OvsPolina/cell_migration_analysis) section.
 
 ---
 
